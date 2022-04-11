@@ -2,19 +2,12 @@
  * Sample React Native App
  * https://github.com/facebook/react-native
  *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
  * @format
+ * @flow strict-local
  */
 
-import {NavigationContainer} from '@react-navigation/native';
-import {useValidation} from 'react-simple-form-validator';
-import styled from 'styled-components/native';
-import {BottomNavigation, Provider as PaperProvider} from 'react-native-paper';
 import React from 'react';
 import {
-  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -31,56 +24,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {RootStackParamList, RootTabParamList} from './types';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-const HomeStyled = styled(View)`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-`;
-
-const HomeScreen = ({navigation}) => {
-  return (
-    <HomeStyled>
-      <Text>Home Screen</Text>
-      <Button title="test" onPress={() => navigation.navigate()} />
-    </HomeStyled>
-  );
-};
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
-const App = () => {
-  return (
-    <NavigationContainer>
-      <PaperProvider>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Root"
-            component={BottomTabNavigator}
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator>
-      </PaperProvider>
-    </NavigationContainer>
-  );
-};
-
-const BottomTab = createBottomTabNavigator();
-
-const BottomTabNavigator = () => {
-  return <BottomTab.Navigator initialRouteName="HomeScreen" />;
-};
-
-export default App;
-
-/*
-const Section: React.FC<{
-  children: React.ReactNode;
-  title: string;
-}> = ({children, title}) => {
+const Section = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -106,12 +51,13 @@ const Section: React.FC<{
   );
 };
 
-const test = () => {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -124,7 +70,7 @@ const test = () => {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Section title="Step One">
-            Edit <SectionTitleStyled>App.tsx</SectionTitleStyled> to change this
+            Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen and then come back to see your edits.
           </Section>
           <Section title="See Your Changes">
@@ -161,4 +107,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-**/
+
+export default App;
