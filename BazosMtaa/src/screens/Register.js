@@ -6,12 +6,12 @@ import {BottomNavigation, Text, useTheme} from 'react-native-paper';
 import {View} from 'react-native';
 import {Link, useNavigation} from '@react-navigation/native';
 
-const Login = ({navigation}) => {
+const Register = ({navigation}) => {
   const {colors} = useTheme();
   return (
-    <LoginScreenStyled>
+    <RegisterScreenStyled>
       <View style={{alignItems: 'center'}}>
-        <Headline>Login</Headline>
+        <Headline>Registrácia</Headline>
       </View>
       <InputStyled
         label={'E-mail'}
@@ -24,20 +24,20 @@ const Login = ({navigation}) => {
         outlineColor={colors.tertiary}
       />
       <ItemsStyled>
-        <LinkStyled to={{screen: 'Register'}}>
-          Chceš sa registrovať? Klikni sem
+        <LinkStyled to={{screen: 'Login'}}>
+          Chceš sa prihlásiť? Klikni sem
         </LinkStyled>
         <Button mode="contained" onPress={() => navigation.navigate('App')}>
-          Prihlásiť sa
+          Registrovať sa
         </Button>
-        <LinkStyled to={{screen: 'App'}}>Pokračovať bez prihlásenia</LinkStyled>
+        <LinkStyled to={{screen: 'App'}}>Pokračovať bez registrácie</LinkStyled>
       </ItemsStyled>
-    </LoginScreenStyled>
+    </RegisterScreenStyled>
   );
 };
-export default Login;
+export default Register;
 
-const LoginScreenStyled = styled(View)`
+const RegisterScreenStyled = styled(View)`
   flex: 1;
   flex-direction: column;
   width: 80%;

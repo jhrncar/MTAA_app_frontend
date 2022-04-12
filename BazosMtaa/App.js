@@ -18,7 +18,6 @@ import {
   View,
 } from 'react-native';
 import {Provider, DefaultTheme} from 'react-native-paper';
-import Navigation from './src/navigation/RootNavigation';
 import {
   Colors,
   DebugInstructions,
@@ -26,6 +25,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import MainNavigation from './src/navigation/RootNavigation';
 
 const theme = {
   ...DefaultTheme,
@@ -42,7 +42,7 @@ const App = () => {
   return (
     <Provider theme={theme}>
       <NavigationContainer>
-        <Navigation signed_id={false} />
+        <MainNavigation />
       </NavigationContainer>
     </Provider>
   );

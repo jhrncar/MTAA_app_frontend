@@ -6,9 +6,32 @@ import {BottomNavigation, Text, useTheme} from 'react-native-paper';
 import HomeScreen from '../screens/Home';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Login from '../screens/Login';
+import Register from '../screens/Register';
 
-const Navigation = () => {
-  const Tab = createMaterialBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+const MainNavigation = () => {
+  const {colors} = useTheme();
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        title: 'Bazoš',
+        headerStyle: {backgroundColor: colors.primary},
+      }}>
+      <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="Login" component={Login} />
+
+      <Stack.Screen
+        name="App"
+        component={AppNavigation}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const AppNavigation = () => {
   const {colors} = useTheme();
   return (
     <Tab.Navigator
@@ -33,8 +56,9 @@ const Navigation = () => {
       <Tab.Screen name="Domov" component={HomeScreen} />
       <Tab.Screen name="Pridať" component={HomeScreen} />
       <Tab.Screen name="Obľúbené" component={HomeScreen} />
-      <Tab.Screen name="Profil" component={Login} />
+      <Tab.Screen name="Profil" component={MainNavigation} />
     </Tab.Navigator>
   );
 };
-export default Navigation;
+
+export default MainNavigation;

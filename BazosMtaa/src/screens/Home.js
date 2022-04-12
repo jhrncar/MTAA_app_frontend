@@ -8,11 +8,18 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import {Appbar} from 'react-native-paper';
 const HomeScreen = () => {
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Home Screen</Text>
-    </View>
+    <SafeAreaView>
+      <Appbar.Header>
+        <Appbar.Content title="Bazoš" />
+        <Appbar.Action icon="magnify" />
+      </Appbar.Header>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <Text>Home Screen</Text>
+      </View>
+    </SafeAreaView>
   );
 };
 
