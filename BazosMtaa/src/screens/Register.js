@@ -1,18 +1,29 @@
 import React from 'react';
-import {Button, Headline, TextInput, Title} from 'react-native-paper';
+import {Button, Headline, List, TextInput, Title} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styled from 'styled-components';
 import {BottomNavigation, Text, useTheme} from 'react-native-paper';
-import {View} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import {Link, useNavigation} from '@react-navigation/native';
 
 const Register = ({navigation}) => {
-  const {colors} = useTheme();
+  const {colors} = useTheme(); //Bud nebude nepovinne pole a bude to vyzerat pekne, alebo tam bude, ale bude to vyzerat zle
   return (
-    <RegisterScreenStyled>
+    <ScrollView
+      contentContainerStyle={{
+        flex: 1,
+        width: '80%',
+        alignSelf: 'center',
+        justifyContent: 'center',
+      }}>
       <View style={{alignItems: 'center'}}>
         <Headline>Registrácia</Headline>
       </View>
+      <InputStyled
+        label={'Meno a priezvisko'}
+        mode="outlined"
+        outlineColor={colors.tertiary}
+      />
       <InputStyled
         label={'E-mail'}
         mode="outlined"
@@ -23,6 +34,37 @@ const Register = ({navigation}) => {
         mode="outlined"
         outlineColor={colors.tertiary}
       />
+      <InputStyled
+        label={'Zopakuj heslo'}
+        mode="outlined"
+        outlineColor={colors.tertiary}
+      />
+      <List.Accordion
+        title="Nepovinné údaje"
+        style={{backgroundColor: colors.secondary}}>
+        <InputStyled
+          label={'Ulica a číslo domu'}
+          mode="outlined"
+          outlineColor={colors.tertiary}
+        />
+
+        <InputStyled
+          label={'PSČ'}
+          mode="outlined"
+          outlineColor={colors.tertiary}
+        />
+        <InputStyled
+          label={'Mesto'}
+          mode="outlined"
+          outlineColor={colors.tertiary}
+        />
+        <InputStyled
+          label={'Okres'}
+          mode="outlined"
+          outlineColor={colors.tertiary}
+        />
+      </List.Accordion>
+
       <ItemsStyled>
         <LinkStyled to={{screen: 'Login'}}>
           Chceš sa prihlásiť? Klikni sem
@@ -32,28 +74,13 @@ const Register = ({navigation}) => {
         </Button>
         <LinkStyled to={{screen: 'App'}}>Pokračovať bez registrácie</LinkStyled>
       </ItemsStyled>
-    </RegisterScreenStyled>
+    </ScrollView>
   );
 };
 export default Register;
 
-const RegisterScreenStyled = styled(View)`
-  flex: 1;
-  flex-direction: column;
-  width: 80%;
-  align-self: center;
-  justify-content: center;
-`;
-const InputStyled = styled(TextInput)`
-  margin-vertical: 10px;
-`;
-const ItemsStyled = styled(View)`
-  flex: 1;
-  flex-direction: column;
-  margin-top: 50px;
-  max-height: 15%;
-  justify-content: space-between;
-`;
+const InputStyled = styled(TextInput)``;
+const ItemsStyled = styled(View)``;
 
 const LinkStyled = styled(Link)`
   color: #000;
