@@ -8,3 +8,4 @@ https://github.com/react-native-webrtc/react-native-webrtc
 https://github.com/oblador/react-native-vector-icons#android
 https://reactnavigation.org/docs/getting-started
 https://github.com/emeraldsanto/react-native-encrypted-storage
+https://github.com/WrathChaos/react-native-header-search-bar
