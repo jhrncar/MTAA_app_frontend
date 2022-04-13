@@ -6,7 +6,7 @@ import {BottomNavigation, Text, useTheme} from 'react-native-paper';
 import {View, ScrollView} from 'react-native';
 import {Link, useNavigation} from '@react-navigation/native';
 
-const Register = ({navigation}) => {
+const CreateProduct = ({navigation}) => {
   const {colors} = useTheme(); //Bud nebude nepovinne pole a bude to vyzerat pekne, alebo tam bude, ale bude to vyzerat zle
   return (
     <ScrollView
@@ -77,7 +77,7 @@ const Register = ({navigation}) => {
     </ScrollView>
   );
 };
-export default Register;
+export default CreateProduct;
 
 const InputStyled = styled(TextInput)``;
 const ItemsStyled = styled(View)``;

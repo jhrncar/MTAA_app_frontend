@@ -7,6 +7,8 @@ import HomeScreen from '../screens/Home';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Login from '../screens/Login';
 import Register from '../screens/Register';
+import Search from '../screens/Search';
+import CreateProduct from '../screens/CreateProduct';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -27,6 +29,11 @@ const MainNavigation = () => {
         component={AppNavigation}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
@@ -37,7 +44,7 @@ const AppNavigation = () => {
     <Tab.Navigator
       activeColor={colors.secondary}
       barStyle={{backgroundColor: colors.primary}}
-      shifting={false}
+      shifting={true}
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color}) => {
           let iconName;
@@ -54,9 +61,9 @@ const AppNavigation = () => {
         },
       })}>
       <Tab.Screen name="Domov" component={HomeScreen} />
-      <Tab.Screen name="Pridať" component={HomeScreen} />
+      <Tab.Screen name="Pridať" component={CreateProduct} />
       <Tab.Screen name="Obľúbené" component={HomeScreen} />
-      <Tab.Screen name="Profil" component={MainNavigation} />
+      <Tab.Screen name="Profil" component={Register} />
     </Tab.Navigator>
   );
 };

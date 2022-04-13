@@ -9,12 +9,15 @@ import {
   View,
 } from 'react-native';
 import {Appbar} from 'react-native-paper';
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   return (
     <SafeAreaView>
       <Appbar.Header>
         <Appbar.Content title="Bazoš" />
-        <Appbar.Action icon="magnify" />
+        <Appbar.Action
+          icon="magnify"
+          onPress={() => navigation.navigate('Search')}
+        />
       </Appbar.Header>
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text>Home Screen</Text>

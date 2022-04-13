@@ -24,13 +24,13 @@ const Login = ({navigation}) => {
         outlineColor={colors.tertiary}
       />
       <ItemsStyled>
-        <LinkStyled to={{screen: 'Register'}}>
-          Chceš sa registrovať? Klikni sem
-        </LinkStyled>
-        <Button mode="contained" onPress={() => navigation.navigate('App')}>
+        <LinkStyled to="/Register">Chceš sa registrovať? Klikni sem</LinkStyled>
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('App', {screen: 'Domov'})}>
           Prihlásiť sa
         </Button>
-        <LinkStyled to={{screen: 'App'}}>Pokračovať bez prihlásenia</LinkStyled>
+        <LinkStyled to="/App/Domov">Pokračovať bez prihlásenia</LinkStyled>
       </ItemsStyled>
     </LoginScreenStyled>
   );
