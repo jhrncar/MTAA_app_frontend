@@ -1,85 +1,139 @@
 import React from 'react';
-import {Button, Headline, List, TextInput, Title} from 'react-native-paper';
+import {
+  Button,
+  Headline,
+  List,
+  Switch,
+  TextInput,
+  Title,
+} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styled from 'styled-components';
-import {BottomNavigation, Text, useTheme} from 'react-native-paper';
-import {View, ScrollView} from 'react-native';
+import {BottomNavigation, Text, useTheme, Appbar} from 'react-native-paper';
+import {View, ScrollView, Image} from 'react-native';
 import {Link, useNavigation} from '@react-navigation/native';
+import ImagePicker, {
+  launchCamera,
+  launchImageLibrary,
+} from 'react-native-image-picker';
 
 const CreateProduct = ({navigation}) => {
-  const {colors} = useTheme(); //Bud nebude nepovinne pole a bude to vyzerat pekne, alebo tam bude, ale bude to vyzerat zle
+  const {colors} = useTheme();
+  const [pickerResponse, setPickerResponse] = React.useState(null);
+
+  const a = () => {
+    launchImageLibrary(
+      {
+        selectionLimit: 1,
+        mediaType: 'photo',
+        includeBase64: false,
+      },
+      setPickerResponse,
+    );
+    console.log(pickerResponse?.assets[0]);
+  };
+
   return (
-    <ScrollView
-      contentContainerStyle={{
-        flex: 1,
-        width: '80%',
-        alignSelf: 'center',
-        justifyContent: 'center',
-      }}>
-      <View style={{alignItems: 'center'}}>
-        <Headline>Registrácia</Headline>
-      </View>
-      <InputStyled
-        label={'Meno a priezvisko'}
-        mode="outlined"
-        outlineColor={colors.tertiary}
-      />
-      <InputStyled
-        label={'E-mail'}
-        mode="outlined"
-        outlineColor={colors.tertiary}
-      />
-      <InputStyled
-        label={'Heslo'}
-        mode="outlined"
-        outlineColor={colors.tertiary}
-      />
-      <InputStyled
-        label={'Zopakuj heslo'}
-        mode="outlined"
-        outlineColor={colors.tertiary}
-      />
-      <List.Accordion
-        title="Nepovinné údaje"
-        style={{backgroundColor: colors.secondary}}>
+    <ScrollView>
+      <Appbar.Header>
+        <Appbar.Content title="Bazoš" />
+        <Appbar.Action
+          icon="magnify"
+          onPress={() => navigation.navigate('Search')}
+        />
+      </Appbar.Header>
+
+      <View
+        style={{
+          width: '80%',
+          alignSelf: 'center',
+        }}>
+        <Button style={{marginVertical: '10%'}} mode="contained" onPress={a}>
+          Image
+        </Button>
+        <Image
+          source={{
+            uri: pickerResponse?.assets && pickerResponse?.assets[0].uri,
+          }}
+          resizeMode="center"
+          style={{
+            width:
+              pickerResponse?.assets[0].width > 200
+                ? 200
+                : pickerResponse?.assets[0].width,
+            height:
+              pickerResponse?.assets[0].height > 200
+                ? 200
+                : pickerResponse?.assets[0].height,
+            alignSelf: 'center',
+          }}
+        />
+        <InputStyled
+          label={'Názov inzerátu'}
+          mode="outlined"
+          outlineColor={colors.tertiary}
+        />
+        <InputStyled
+          multiline
+          label={'Popis'}
+          mode="outlined"
+          outlineColor={colors.tertiary}
+        />
+        <InputStyled
+          label={'Cena'}
+          mode="outlined"
+          outlineColor={colors.tertiary}
+          keyboardType="numeric"
+        />
+        <InputStyled
+          label={'Kategória'} // dat na vyber kategorie
+          mode="outlined"
+          outlineColor={colors.tertiary}
+        />
         <InputStyled
           label={'Ulica a číslo domu'}
           mode="outlined"
           outlineColor={colors.tertiary}
         />
-
-        <InputStyled
-          label={'PSČ'}
-          mode="outlined"
-          outlineColor={colors.tertiary}
-        />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <InputStyled
+            style={{width: '45%'}}
+            label={'PSČ'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+            keyboardType="numeric"
+          />
+          <InputStyled
+            style={{width: '45%'}} // dat na vyber okresy
+            label={'Okres'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+          />
+        </View>
         <InputStyled
           label={'Mesto'}
           mode="outlined"
           outlineColor={colors.tertiary}
         />
-        <InputStyled
-          label={'Okres'}
-          mode="outlined"
-          outlineColor={colors.tertiary}
-        />
-      </List.Accordion>
-
-      <ItemsStyled>
-        <LinkStyled to="/Login">Chceš sa prihlásiť? Klikni sem</LinkStyled>
         <Button
+          style={{marginVertical: '10%'}}
           mode="contained"
           onPress={() => navigation.navigate('App', {screen: 'Domov'})}>
-          Registrovať sa
+          Vytvoriť
         </Button>
-        <LinkStyled to="/App/Domov">Pokračovať bez registrácie</LinkStyled>
-      </ItemsStyled>
+      </View>
     </ScrollView>
   );
 };
 export default CreateProduct;
 
-const InputStyled = styled(TextInput)``;
+const InputStyled = styled(TextInput)`
+  margin-top: 2%;
+`;
 const ItemsStyled = styled(View)``;
 
 const LinkStyled = styled(Link)`

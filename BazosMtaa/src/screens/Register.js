@@ -1,70 +1,93 @@
 import React from 'react';
-import {Button, Headline, List, TextInput, Title} from 'react-native-paper';
+import {
+  Button,
+  Caption,
+  Headline,
+  List,
+  TextInput,
+  Title,
+} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styled from 'styled-components';
-import {BottomNavigation, Text, useTheme} from 'react-native-paper';
+import {BottomNavigation, Text, useTheme, Switch} from 'react-native-paper';
 import {View, ScrollView} from 'react-native';
 import {Link, useNavigation} from '@react-navigation/native';
+import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
 
 const Register = ({navigation}) => {
   const {colors} = useTheme(); //Bud nebude nepovinne pole a bude to vyzerat pekne, alebo tam bude, ale bude to vyzerat zle
+  const [isRequired, setIsRequired] = React.useState(true);
+  const handleRequired = () => setIsRequired(!isRequired);
   return (
     <ScrollView
       contentContainerStyle={{
-        flex: 1,
+        paddingTop: '20%',
         width: '80%',
         alignSelf: 'center',
-        justifyContent: 'center',
+        justifySelf: 'center',
       }}>
+      <View
+        style={{
+          alignSelf: 'flex-end',
+          flexDirection: 'row',
+        }}>
+        <Caption>Povinné údaje</Caption>
+        <Switch value={isRequired} onValueChange={handleRequired} />
+      </View>
       <View style={{alignItems: 'center'}}>
         <Headline>Registrácia</Headline>
       </View>
-      <InputStyled
-        label={'Meno a priezvisko'}
-        mode="outlined"
-        outlineColor={colors.tertiary}
-      />
-      <InputStyled
-        label={'E-mail'}
-        mode="outlined"
-        outlineColor={colors.tertiary}
-      />
-      <InputStyled
-        label={'Heslo'}
-        mode="outlined"
-        outlineColor={colors.tertiary}
-      />
-      <InputStyled
-        label={'Zopakuj heslo'}
-        mode="outlined"
-        outlineColor={colors.tertiary}
-      />
-      <List.Accordion
-        title="Nepovinné údaje"
-        style={{backgroundColor: colors.secondary}}>
-        <InputStyled
-          label={'Ulica a číslo domu'}
-          mode="outlined"
-          outlineColor={colors.tertiary}
-        />
+      {isRequired && (
+        <View>
+          <InputStyled
+            label={'Meno a priezvisko'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+          />
+          <InputStyled
+            label={'E-mail'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+            keyboardType="email-address"
+          />
+          <InputStyled
+            label={'Heslo'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+          />
+          <InputStyled
+            label={'Zopakuj heslo'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+          />
+        </View>
+      )}
+      {!isRequired && (
+        <View>
+          <InputStyled
+            label={'Ulica a číslo domu'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+          />
 
-        <InputStyled
-          label={'PSČ'}
-          mode="outlined"
-          outlineColor={colors.tertiary}
-        />
-        <InputStyled
-          label={'Mesto'}
-          mode="outlined"
-          outlineColor={colors.tertiary}
-        />
-        <InputStyled
-          label={'Okres'}
-          mode="outlined"
-          outlineColor={colors.tertiary}
-        />
-      </List.Accordion>
-
+          <InputStyled
+            label={'PSČ'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+            keyboardType="numeric"
+          />
+          <InputStyled
+            label={'Mesto'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+          />
+          <InputStyled
+            label={'Okres'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+          />
+        </View>
+      )}
       <ItemsStyled>
         <LinkStyled to="/Login">Chceš sa prihlásiť? Klikni sem</LinkStyled>
         <Button
@@ -79,8 +102,12 @@ const Register = ({navigation}) => {
 };
 export default Register;
 
-const InputStyled = styled(TextInput)``;
-const ItemsStyled = styled(View)``;
+const InputStyled = styled(TextInput)`
+  margin-vertical: 2%;
+`;
+const ItemsStyled = styled(View)`
+  margin-vertical: 15%;
+`;
 
 const LinkStyled = styled(Link)`
   color: #000;

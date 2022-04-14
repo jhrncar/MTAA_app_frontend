@@ -5,9 +5,54 @@ import styled from 'styled-components';
 import {BottomNavigation, Text, useTheme} from 'react-native-paper';
 import {View} from 'react-native';
 import {Link, useNavigation} from '@react-navigation/native';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 const Login = ({navigation}) => {
   const {colors} = useTheme();
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://192.168.2.9:8000/login/', {
+        method: 'POST',
+        headers: {
+          Accept: '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_name: 'filter_test',
+          password: 'test123',
+        }),
+      });
+      console.log(response['status']);
+      await EncryptedStorage.setItem(
+        'loggedIn',
+        JSON.stringify({
+          loggedIn: true,
+        }),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+
+    navigation.navigate('App', {screen: 'Domov'});
+  };
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('http://192.168.2.9:8000/logout/', {
+        method: 'POST',
+      });
+      console.log(response['status']);
+      await EncryptedStorage.setItem(
+        'loggedIn',
+        JSON.stringify({
+          loggedIn: false,
+        }),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+
+    navigation.navigate('App', {screen: 'Domov'});
+  };
   return (
     <LoginScreenStyled>
       <View style={{alignItems: 'center'}}>
@@ -17,6 +62,7 @@ const Login = ({navigation}) => {
         label={'E-mail'}
         mode="outlined"
         outlineColor={colors.tertiary}
+        keyboardType="email-address"
       />
       <InputStyled
         label={'Heslo'}
@@ -25,10 +71,11 @@ const Login = ({navigation}) => {
       />
       <ItemsStyled>
         <LinkStyled to="/Register">Chceš sa registrovať? Klikni sem</LinkStyled>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate('App', {screen: 'Domov'})}>
+        <Button mode="contained" onPress={handleLogin}>
           Prihlásiť sa
+        </Button>
+        <Button mode="contained" onPress={handleLogout}>
+          Odlhásiť sa
         </Button>
         <LinkStyled to="/App/Domov">Pokračovať bez prihlásenia</LinkStyled>
       </ItemsStyled>
