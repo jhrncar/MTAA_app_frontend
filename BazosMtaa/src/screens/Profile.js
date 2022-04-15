@@ -6,40 +6,21 @@ import {BottomNavigation, Text, useTheme} from 'react-native-paper';
 import {View} from 'react-native';
 import {Link, useNavigation} from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import {Navigate} from '../navigation/RootNavigation';
 import {AuthContext} from '../context/AuthContext';
 
-const Login = ({navigation}) => {
+const Profile = ({navigation}) => {
   const {colors} = useTheme();
-  const {login} = React.useContext(AuthContext);
-
+  const {logout} = React.useContext(AuthContext);
   return (
     <LoginScreenStyled>
-      <View style={{alignItems: 'center'}}>
-        <Headline>Login</Headline>
-      </View>
-      <InputStyled
-        label={'Používateľské meno'}
-        mode="outlined"
-        outlineColor={colors.tertiary}
-      />
-      <InputStyled
-        label={'Heslo'}
-        mode="outlined"
-        outlineColor={colors.tertiary}
-      />
-      <ItemsStyled>
-        <LinkStyled to="/Register">Chceš sa registrovať? Klikni sem</LinkStyled>
-        <Button mode="contained" onPress={login}>
-          Prihlásiť sa
-        </Button>
-        <LinkStyled to="/NotLoggedApp/Domov">
-          Pokračovať bez prihlásenia
-        </LinkStyled>
-      </ItemsStyled>
+      <Button mode="contained" onPress={logout}>
+        Odhlásiť sa
+      </Button>
     </LoginScreenStyled>
   );
 };
-export default Login;
+export default Profile;
 
 const LoginScreenStyled = styled(View)`
   flex: 1;
