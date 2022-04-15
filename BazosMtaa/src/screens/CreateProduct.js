@@ -85,7 +85,7 @@ const CreateProduct = ({navigation}) => {
   };
 
   return (
-    <ScrollView>
+    <>
       <Appbar.Header>
         <Appbar.Content title="Bazoš" />
         <Appbar.Action
@@ -93,100 +93,101 @@ const CreateProduct = ({navigation}) => {
           onPress={() => navigation.navigate('Search')}
         />
       </Appbar.Header>
-
-      <View
-        style={{
-          width: '80%',
-          alignSelf: 'center',
-        }}>
-        {!pickerResponse?.assets[0] ? (
-          <Button
-            style={{marginVertical: '10%'}}
-            mode="outlined"
-            onPress={handleImage}>
-            Pridaj obrázok
-          </Button>
-        ) : (
-          <TouchableRipple onPress={handleImage}>
-            <Image
-              source={{
-                uri: pickerResponse?.assets && pickerResponse?.assets[0].uri,
-              }}
-              resizeMode="center"
-              style={{
-                marginTop: '5%',
-                width:
-                  pickerResponse?.assets[0].width > 200
-                    ? 200
-                    : pickerResponse?.assets[0].width,
-                height:
-                  pickerResponse?.assets[0].height > 200
-                    ? 200
-                    : pickerResponse?.assets[0].height,
-                alignSelf: 'center',
-              }}
-            />
-          </TouchableRipple>
-        )}
-        <InputStyled
-          label={'Názov inzerátu'}
-          mode="outlined"
-          outlineColor={colors.tertiary}
-        />
-        <InputStyled
-          multiline
-          label={'Popis'}
-          mode="outlined"
-          outlineColor={colors.tertiary}
-        />
-        <InputStyled
-          label={'Cena'}
-          mode="outlined"
-          outlineColor={colors.tertiary}
-          keyboardType="numeric"
-        />
-        <InputStyled
-          label={'Kategória'} // dat na vyber kategorie
-          mode="outlined"
-          outlineColor={colors.tertiary}
-        />
-        <InputStyled
-          label={'Ulica a číslo domu'}
-          mode="outlined"
-          outlineColor={colors.tertiary}
-        />
+      <ScrollView>
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
+            width: '80%',
+            alignSelf: 'center',
           }}>
+          {!pickerResponse?.assets[0] ? (
+            <Button
+              style={{marginVertical: '10%'}}
+              mode="outlined"
+              onPress={handleImage}>
+              Pridaj obrázok
+            </Button>
+          ) : (
+            <TouchableRipple onPress={handleImage}>
+              <Image
+                source={{
+                  uri: pickerResponse?.assets && pickerResponse?.assets[0].uri,
+                }}
+                resizeMode="center"
+                style={{
+                  marginTop: '5%',
+                  width:
+                    pickerResponse?.assets[0].width > 200
+                      ? 200
+                      : pickerResponse?.assets[0].width,
+                  height:
+                    pickerResponse?.assets[0].height > 200
+                      ? 200
+                      : pickerResponse?.assets[0].height,
+                  alignSelf: 'center',
+                }}
+              />
+            </TouchableRipple>
+          )}
           <InputStyled
-            style={{width: '45%'}}
-            label={'PSČ'}
+            label={'Názov inzerátu'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+          />
+          <InputStyled
+            multiline
+            label={'Popis'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+          />
+          <InputStyled
+            label={'Cena'}
             mode="outlined"
             outlineColor={colors.tertiary}
             keyboardType="numeric"
           />
           <InputStyled
-            style={{width: '45%'}} // dat na vyber okresy
-            label={'Okres'}
+            label={'Kategória'} // dat na vyber kategorie
             mode="outlined"
             outlineColor={colors.tertiary}
           />
+          <InputStyled
+            label={'Ulica a číslo domu'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <InputStyled
+              style={{width: '45%'}}
+              label={'PSČ'}
+              mode="outlined"
+              outlineColor={colors.tertiary}
+              keyboardType="numeric"
+            />
+            <InputStyled
+              style={{width: '45%'}} // dat na vyber okresy
+              label={'Okres'}
+              mode="outlined"
+              outlineColor={colors.tertiary}
+            />
+          </View>
+          <InputStyled
+            label={'Mesto'}
+            mode="outlined"
+            outlineColor={colors.tertiary}
+          />
+          <Button
+            style={{marginVertical: '10%'}}
+            mode="contained"
+            onPress={handleCreate}>
+            Vytvoriť
+          </Button>
         </View>
-        <InputStyled
-          label={'Mesto'}
-          mode="outlined"
-          outlineColor={colors.tertiary}
-        />
-        <Button
-          style={{marginVertical: '10%'}}
-          mode="contained"
-          onPress={handleCreate}>
-          Vytvoriť
-        </Button>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 export default CreateProduct;

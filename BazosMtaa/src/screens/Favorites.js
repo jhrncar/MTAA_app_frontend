@@ -41,20 +41,20 @@ export default ({navigation}) => {
           stickySectionHeadersEnabled={false}
           sections={SECTIONS}
           renderSectionHeader={({section}) => (
-            <>
+            <View style={{flex: 1}}>
               <Text style={styles.sectionHeader}>{section.title}</Text>
               {true ? (
                 <FlatList
                   horizontal
                   data={section.data}
-                  renderItem={({item}) => <AdCard />}
+                  renderItem={({item}) => <AdCard ad={{name: 'test'}} />}
                   showsHorizontalScrollIndicator={false}
                   ItemSeparatorComponent={() => (
                     <Divider style={{width: 40, opacity: 0}} />
                   )}
                 />
               ) : null}
-            </>
+            </View>
           )}
           renderItem={() => {
             return null;
@@ -67,7 +67,7 @@ export default ({navigation}) => {
 
 const SECTIONS = [
   {
-    title: 'Made for you',
+    title: 'Kategória: Auto',
     data: [
       {
         key: '1',
@@ -98,7 +98,7 @@ const SECTIONS = [
     ],
   },
   {
-    title: 'Punk and hardcore',
+    title: 'Kategória: PC',
     data: [
       {
         key: '1',
@@ -129,7 +129,7 @@ const SECTIONS = [
     ],
   },
   {
-    title: 'Based on your recent listening',
+    title: 'Kategória: Iné',
     data: [
       {
         key: '1',

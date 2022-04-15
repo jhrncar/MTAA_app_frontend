@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {Appbar, Divider, Title, useTheme} from 'react-native-paper';
 import CategoryCard from '../components/CategoryCard';
+import NewAdsCarousel from '../components/NewAdsCarousel';
 
 const HomeScreen = ({navigation}) => {
   //TODO vlastny carousel
@@ -63,11 +64,14 @@ const HomeScreen = ({navigation}) => {
         </View>
         <View
           style={{
-            flex: 3,
+            flex: 1.2,
             borderStyle: 'solid',
             borderColor: colors.tertiary,
             borderTopWidth: 3,
-          }}></View>
+          }}>
+          <Title style={{marginLeft: 10}}>Najnovšie inzeráty</Title>
+          <NewAdsCarousel />
+        </View>
       </View>
     </>
   );

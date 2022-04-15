@@ -9,20 +9,34 @@ import {
 } from 'react-native-paper';
 const AdCard = ({navigation, ad}) => {
   return (
-    <Card mode="elevated" elevation={5} onPress={() => console.log('card')}>
-      <Image
-        resizeMode="contain"
-        source={require('../../pictures/dom.png')}
-        style={{}}
-      />
-      <Card.Content>
-        <Title style={{alignSelf: 'center'}}>Test</Title>
+    <Card
+      mode="elevated"
+      elevation={5}
+      onPress={() => console.log('card')}
+      style={{flex: 1}}>
+      {false && (
+        <Card.Cover
+          resizeMode="contain"
+          style={{flex: 1}}
+          source={require('../../pictures/dom.png')}
+        />
+      )}
+      <Card.Content
+        style={{
+          flex: 1,
+          justifyContent: 'space-between',
+          flexDirection: 'column',
+        }}>
+        <Title>{ad.name}</Title>
+
         <View
           style={{
+            flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
+            alignItems: 'center',
           }}>
-          <Text style={{alignSelf: 'center'}}>700 €</Text>
+          <Text>700 €</Text>
           <IconButton
             icon="star-outline"
             color={'#FF8F00'}
