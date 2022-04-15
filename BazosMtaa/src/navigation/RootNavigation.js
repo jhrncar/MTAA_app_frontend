@@ -13,6 +13,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import Profile from '../screens/Profile';
 import SplashScreen from '../screens/SplashScreen';
 import {AuthContext} from '../context/AuthContext';
+import FavoritesScreen from '../screens/Favorites';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -123,7 +124,7 @@ const LoggedAppNavigation = () => {
       })}>
       <Tab.Screen name="Domov" component={HomeScreen} />
       <Tab.Screen name="Pridať" component={CreateProduct} />
-      <Tab.Screen name="Obľúbené" component={HomeScreen} />
+      <Tab.Screen name="Obľúbené" component={FavoritesScreen} />
       <Tab.Screen name="Profil" component={Profile} />
     </Tab.Navigator>
   );
