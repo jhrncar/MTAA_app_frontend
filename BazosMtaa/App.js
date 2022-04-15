@@ -25,6 +25,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import {AuthProvider} from './src/context/AuthContext';
 import MainNavigation from './src/navigation/RootNavigation';
 
 const theme = {
@@ -40,11 +41,11 @@ const theme = {
 
 const App = () => {
   return (
-    <Provider theme={theme}>
-      <NavigationContainer>
+    <AuthProvider>
+      <Provider theme={theme}>
         <MainNavigation />
-      </NavigationContainer>
-    </Provider>
+      </Provider>
+    </AuthProvider>
   );
 };
 

@@ -13,11 +13,13 @@ import {BottomNavigation, Text, useTheme, Switch} from 'react-native-paper';
 import {View, ScrollView} from 'react-native';
 import {Link, useNavigation} from '@react-navigation/native';
 import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
+import {AuthContext} from '../context/AuthContext';
 
 const Register = ({navigation}) => {
   const {colors} = useTheme(); //Bud nebude nepovinne pole a bude to vyzerat pekne, alebo tam bude, ale bude to vyzerat zle
   const [isRequired, setIsRequired] = React.useState(true);
   const handleRequired = () => setIsRequired(!isRequired);
+  const {register} = React.useContext(AuthContext);
   return (
     <ScrollView
       contentContainerStyle={{
@@ -40,7 +42,7 @@ const Register = ({navigation}) => {
       {isRequired && (
         <View>
           <InputStyled
-            label={'Meno a priezvisko'}
+            label={'Používateľské meno'}
             mode="outlined"
             outlineColor={colors.tertiary}
           />
@@ -90,12 +92,12 @@ const Register = ({navigation}) => {
       )}
       <ItemsStyled>
         <LinkStyled to="/Login">Chceš sa prihlásiť? Klikni sem</LinkStyled>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate('App', {screen: 'Domov'})}>
+        <Button mode="contained" onPress={register}>
           Registrovať sa
         </Button>
-        <LinkStyled to="/App/Domov">Pokračovať bez registrácie</LinkStyled>
+        <LinkStyled to="/NotLoggedApp/Domov">
+          Pokračovať bez registrácie
+        </LinkStyled>
       </ItemsStyled>
     </ScrollView>
   );
