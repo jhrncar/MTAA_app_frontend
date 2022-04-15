@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@freakycoder/react-native-helpers": "^1.0.2",
+    "@react-native-picker/picker": "^2.4.1",
     "@react-navigation/material-bottom-tabs": "^6.2.1",
     "@react-navigation/material-top-tabs": "^6.2.1",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.1",
+    "picker": "^0.1.4",
     "react": "17.0.2",
     "react-native": "0.68.0",
     "react-native-androw": "^0.0.34",
