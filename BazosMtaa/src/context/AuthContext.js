@@ -11,7 +11,7 @@ export const AuthProvider = ({children}) => {
   
   const register = (firstname, lastname,name, email, password,city,street,zipcode,phone,district) => {
     setIsLoading(true);
-    fetch('http://192.168.100.203:8000/register/', {
+    fetch('http://192.168.100.14:8000/register/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -52,7 +52,7 @@ export const AuthProvider = ({children}) => {
 
   const login = (username, password) => {
     setIsLoading(true);
-    fetch('http://192.168.1.12:8000/login/', {
+    fetch('http://192.168.100.14:8000/login/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
