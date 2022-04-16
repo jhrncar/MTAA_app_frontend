@@ -25,22 +25,31 @@ const Register = ({navigation}) => {
   const handleRequired = () => setIsRequired(!isRequired);
   const {register} = React.useContext(AuthContext);
   const [email, setEmail] = useState(null);
-  const [valid_email, setValid_Email] = useState(true);
   const [firstname, setFirstName] = useState(null);
   const [lastname, setLastName] = useState(null);
   const [name, setName] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirmpassword, setConfirmPassword] = useState(null);
-  const [equal_pass, setEqual_Pass] = useState(true);
   const [street, setStreet] = useState(null);
   const [zipcode, setZipcode] = useState(null);
   const [city, setCity] = useState(null);
   const [district, setDistrict] = useState(null);
   const [phone, setPhone] = useState(null);
 
-  function validateEmail(email) {
-    const regexp =
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  const [valid_email, setValid_Email] = useState(true);
+  const [equal_pass, setEqual_Pass] = useState(true);
+  const [unique_user, setUnique_User] = useState(true);
+  const [unique_email, setUnique_Email] = useState(true);
+
+  const [enable_button_email, setEnable_Button_Email] = useState(false);
+  const [enable_button_unique_email, setEnable_Button_Unique_Email] = useState(false);
+  const [enable_button_pass, setEnable_Button_Pass] = useState(false);
+  const [enable_button_user, setEnable_Button_User] = useState(false);
+
+  const [all_data, setAll_Data]= useState(true);
+
+  function validateEmail (email) {
+    const regexp =  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     return regexp.test(email);
   }
   const [data, setData] = React.useState([]);
@@ -53,15 +62,88 @@ const Register = ({navigation}) => {
   const CheckEmail = val => {
     var isvalid = validateEmail(val);
 
-    if (isvalid !== true) setValid_Email(false);
-    if (isvalid === true) setValid_Email(true);
+    var isvalid = validateEmail(val)
+    
+    if(isvalid !== true)
+      setValid_Email(false)
+    
+    if(isvalid === true){
+      setValid_Email(true);
+      setEnable_Button_Email(true);
+    }
   };
 
-  const CheckPasswords = (pass, conf) => {
-    if (pass === conf) setEqual_Pass(true);
-    if (pass !== conf) setEqual_Pass(false);
+  const CheckPasswords = (pass,conf) => {
+
+    if(pass === conf){
+      setEqual_Pass(true);
+      setEnable_Button_Pass(true);
+    }
+    if(pass !== conf){
+      setEqual_Pass(false);
+    }
+      console.log(enable_button_email)
+      console.log(enable_button_pass)
+      console.log(enable_button_unique_email)
+      console.log(enable_button_user)
+      console.log(!firstname)
+      console.log(!lastname)
+      
+      setAll_Data(!(enable_button_email &&firstname && lastname && 
+        enable_button_unique_email && enable_button_user));
+    
   };
 
+  const CheckUsername = (name) => {
+    
+    return fetch('http://192.168.100.14:8000/check_username/?username=' + name, {
+    })
+    .then(response => {
+      const statusCode = response.status;
+      return { statusCode,};
+    })
+    .then(res => {
+      if (res.statusCode === 200){
+        setUnique_User(true);
+        setEnable_Button_User(true);
+      }
+      else
+        setUnique_User(false)
+    
+    }).catch(error => {
+      console.error(error);
+      return { name: "network error", description: "" };
+    });
+
+  };
+
+  const CheckUniqueEmail = (email) => {
+    
+    CheckEmail(email)
+
+    return fetch('http://192.168.100.14:8000/check_email/?email=' + email, {
+    })
+    .then(response => {
+      const statusCode = response.status;
+      return { statusCode,};
+    })
+    .then(res => {
+      if (res.statusCode === 200){
+        setUnique_Email(true);
+        setEnable_Button_Unique_Email(true);
+      }
+      else
+        setUnique_Email(false)
+    
+    }).catch(error => {
+      console.error(error);
+      return { name: "network error", description: "" };
+    });
+
+  };
+
+
+    
   return (
     <ScrollView
       contentContainerStyle={{
@@ -90,6 +172,12 @@ const Register = ({navigation}) => {
             onChangeText={val => setFirstName(val)}
             value={firstname}
           />
+          {firstname ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>Meno je povinné</Text>
+            </Animatable.View>
+          }
+          
           <InputStyled
             label={'Priezvisko'}
             mode="outlined"
@@ -97,40 +185,55 @@ const Register = ({navigation}) => {
             onChangeText={val => setLastName(val)}
             value={lastname}
           />
+          {lastname ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>Priezvisko je povinné</Text>
+            </Animatable.View>
+          }
+
           <InputStyled
             label={'Používateľské meno'}
             mode="outlined"
             outlineColor={colors.tertiary}
-            onChangeText={val => setName(val)}
+            onChangeText={(val) => setName(val)}
+            onEndEditing={(e) => CheckUsername(e.nativeEvent.text)}
             value={name}
           />
+          {unique_user ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>Toto meno sa už používa</Text>
+            </Animatable.View>
+          }
 
           <InputStyled
             label={'E-mail'}
             mode="outlined"
             outlineColor={colors.tertiary}
             keyboardType="email-address"
-            onChangeText={val => setEmail(val)}
-            onEndEditing={e => CheckEmail(e.nativeEvent.text)}
+            onChangeText={(val) => setEmail(val)}
+            onEndEditing={(e) => CheckUniqueEmail(e.nativeEvent.text)}
             value={email}
           />
-          {valid_email ? null : (
+          {valid_email ? null : 
             <Animatable.View animation="fadeInLeft" duration={500}>
               <Text style={styles.errormsg}>
                 Nesprávny formát emailu (správny formát: example@example.sk)
               </Text>
             </Animatable.View>
-          )}
+          }
+
+          {unique_email ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>Tento email sa už používa</Text>
+            </Animatable.View>
+          }
 
           <InputStyled
             secureTextEntry={true}
             label={'Heslo'}
             mode="outlined"
             outlineColor={colors.tertiary}
-            onChangeText={val => setPassword(val)}
-            onEndEditing={e =>
-              CheckPasswords(e.nativeEvent.text, confirmpassword)
-            }
+            onChangeText={(val) => setPassword(val)}
             value={password}
           />
           <InputStyled
@@ -198,22 +301,7 @@ const Register = ({navigation}) => {
       )}
       <ItemsStyled>
         <LinkStyled to="/Login">Chceš sa prihlásiť? Klikni sem</LinkStyled>
-        <Button
-          mode="contained"
-          onPress={() =>
-            register(
-              firstname,
-              lastname,
-              name,
-              email,
-              password,
-              city,
-              street,
-              zipcode,
-              phone,
-              district,
-            )
-          }>
+        <Button disabled={all_data} mode="contained"  onPress={()=>register(firstname, lastname,name, email, password,city,street,zipcode,phone,district)}>
           Registrovať sa
         </Button>
         <LinkStyled to="/NotLoggedApp/Domov">
