@@ -14,6 +14,8 @@ import Profile from '../screens/Profile';
 import SplashScreen from '../screens/SplashScreen';
 import {AuthContext} from '../context/AuthContext';
 import FavoritesScreen from '../screens/Favorites';
+import AdCard from '../components/AdCard';
+import AdScreen from '../screens/AdScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -56,6 +58,11 @@ const MainNavigation = () => {
         <Stack.Screen
           name="Search"
           component={Search}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Ad"
+          component={AdScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
