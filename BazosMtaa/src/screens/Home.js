@@ -8,6 +8,7 @@ import {
   useColorScheme,
   View,
   useWindowDimensions,
+  FlatList,
 } from 'react-native';
 import {Appbar, Divider, Title, useTheme} from 'react-native-paper';
 import CategoryCard from '../components/CategoryCard';
@@ -15,6 +16,13 @@ import NewAdsCarousel from '../components/NewAdsCarousel';
 
 const HomeScreen = ({navigation}) => {
   const {colors} = useTheme();
+  const [data, setData] = React.useState([]);
+  React.useEffect(() => {
+    fetch('http://192.168.1.12:8000/get_categories/')
+      .then(res => res.json())
+      .then(res => setData(res))
+      .catch(err => console.log(err));
+  }, []);
   return (
     <>
       <Appbar.Header>
@@ -30,40 +38,20 @@ const HomeScreen = ({navigation}) => {
           flexDirection: 'column',
         }}>
         <View style={{flex: 4}}>
-          <ScrollView>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}>
-              <CategoryCard />
-              <CategoryCard />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}>
-              <CategoryCard />
-              <CategoryCard />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}>
-              <CategoryCard />
-              <CategoryCard />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}>
-              <CategoryCard />
-              <CategoryCard />
-            </View>
-          </ScrollView>
+          <FlatList
+            columnWrapperStyle={{justifyContent: 'space-between'}}
+            numColumns={2}
+            data={data}
+            renderItem={({item}) => (
+              <View style={{flex: 0.5}}>
+                <CategoryCard navigation={navigation} category={item} />
+              </View>
+            )}
+          />
         </View>
         <View
           style={{
-            flex: 1.5,
+            flex: 3,
             borderStyle: 'solid',
             borderColor: colors.tertiary,
             borderTopWidth: 3,

@@ -14,19 +14,17 @@ const AdCard = ({navigation, ad}) => {
       elevation={5}
       onLongPress={() => navigation.navigate('Ad', {ad: ad})}
       style={{flex: 1}}>
-      {false && (
-        <Card.Cover
-          resizeMode="contain"
-          style={{flex: 1}}
-          source={require('../../pictures/dom.png')}
-        />
-      )}
+      <Card.Cover
+        resizeMode="stretch"
+        source={{uri: 'http://192.168.1.12:8000/get_image/' + ad.picture}}
+        style={{flex: 1}}
+      />
       <Card.Content
         style={{
           flex: 1,
           flexDirection: 'column',
         }}>
-        <View style={{flex: 4, marginTop: '5%'}}>
+        <View style={{flex: 4, marginTop: '5%', maxHeight: 100}}>
           <ScrollView>
             <Text>{ad.name}</Text>
           </ScrollView>
