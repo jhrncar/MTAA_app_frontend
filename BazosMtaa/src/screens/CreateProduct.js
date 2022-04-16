@@ -37,8 +37,6 @@ const CreateProduct = ({navigation}) => {
         selectionLimit: 1,
         mediaType: 'photo',
         includeBase64: false,
-        maxHeight: 500,
-        maxWidth: 500,
       },
       useImageCallback,
     );
@@ -50,7 +48,7 @@ const CreateProduct = ({navigation}) => {
     formData.append(
       'json',
       JSON.stringify({
-        name: 'ja',
+        name: 'new',
         price: 69,
         district: 'Senec',
         description: 'test',
@@ -112,17 +110,11 @@ const CreateProduct = ({navigation}) => {
                 source={{
                   uri: pickerResponse?.assets && pickerResponse?.assets[0].uri,
                 }}
-                resizeMode="center"
+                resizeMode="contain"
                 style={{
+                  width: '100%',
+                  height: 300,
                   marginTop: '5%',
-                  width:
-                    pickerResponse?.assets[0].width > 200
-                      ? 200
-                      : pickerResponse?.assets[0].width,
-                  height:
-                    pickerResponse?.assets[0].height > 200
-                      ? 200
-                      : pickerResponse?.assets[0].height,
                   alignSelf: 'center',
                 }}
               />

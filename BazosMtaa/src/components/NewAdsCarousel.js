@@ -23,7 +23,7 @@ import {
 } from 'react-native-paper';
 import AdCard from './AdCard';
 
-const NewAdsCarousel = () => {
+const NewAdsCarousel = ({navigation}) => {
   const [data, setData] = React.useState([]);
   const [index, setIndex] = React.useState(0);
   React.useEffect(() => {
@@ -34,11 +34,18 @@ const NewAdsCarousel = () => {
   }, []);
   const handleIncrement = () => {
     setIndex(index + 2);
-    console.log(index);
+    refresh();
   };
   const handleDecrement = () => {
     setIndex(index - 2);
-    console.log(index);
+    refresh();
+  };
+
+  const refresh = () => {
+    fetch('http://192.168.1.12:8000/latest_ads/')
+      .then(res => res.json())
+      .then(res => setData(res.items))
+      .catch(err => console.log(err));
   };
 
   return (
@@ -64,7 +71,7 @@ const NewAdsCarousel = () => {
             margin: 15,
             alignSelf: 'center',
           }}>
-          <AdCard ad={item} />
+          <AdCard navigation={navigation} ad={item} />
         </View>
       ))}
 

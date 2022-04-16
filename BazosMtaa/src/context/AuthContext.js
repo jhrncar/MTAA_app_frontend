@@ -1,6 +1,6 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 import React, {createContext, useEffect, useState} from 'react';
-import Register from '../screens/Register'
+import Register from '../screens/Register';
 
 export const AuthContext = createContext();
 
@@ -8,8 +8,19 @@ export const AuthProvider = ({children}) => {
   const [isLogged, setLogged] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [splashLoading, setSplashLoading] = useState(false);
-  
-  const register = (firstname, lastname,name, email, password,city,street,zipcode,phone,district) => {
+
+  const register = (
+    firstname,
+    lastname,
+    name,
+    email,
+    password,
+    city,
+    street,
+    zipcode,
+    phone,
+    district,
+  ) => {
     setIsLoading(true);
     fetch('http://192.168.100.14:8000/register/', {
       method: 'POST',
@@ -21,34 +32,32 @@ export const AuthProvider = ({children}) => {
         first_name: firstname,
         last_name: lastname,
         email: email,
-        user_name: name, 
+        user_name: name,
         password: password,
         city: city,
         street: street,
         zip_code: zipcode,
         phone: phone,
-        district:district,
+        district: district,
       }),
     })
-    .then(value => {
-      //tu budu nejake IFy na response
-      setLogged(true);
-      EncryptedStorage.setItem(
-        'loggedIn',
-       // JSON.stringify({
-         // loggedIn: true,
-       // }),
-      );
-      setIsLoading(false);
-    })
-    .catch(error => {
-      console.log(error.response);
-    });
-      
+      .then(value => {
+        //tu budu nejake IFy na response
+        setLogged(true);
+        EncryptedStorage.setItem(
+          'loggedIn',
+          JSON.stringify({
+            loggedIn: true,
+          }),
+        );
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
 
     console.log('login');
   };
-
 
   const login = (username, password) => {
     setIsLoading(true);
@@ -59,8 +68,8 @@ export const AuthProvider = ({children}) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user_name: username, //tu bude premenna username
-        password: password, //tu bude premenna password
+        user_name: 'filter_test', //tu bude premenna username
+        password: 'test123', //tu bude premenna password
       }),
     })
       .then(value => {

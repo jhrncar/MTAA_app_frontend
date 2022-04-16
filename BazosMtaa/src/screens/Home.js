@@ -14,7 +14,6 @@ import CategoryCard from '../components/CategoryCard';
 import NewAdsCarousel from '../components/NewAdsCarousel';
 
 const HomeScreen = ({navigation}) => {
-  //TODO vlastny carousel
   const {colors} = useTheme();
   return (
     <>
@@ -64,13 +63,13 @@ const HomeScreen = ({navigation}) => {
         </View>
         <View
           style={{
-            flex: 1.2,
+            flex: 1.5,
             borderStyle: 'solid',
             borderColor: colors.tertiary,
             borderTopWidth: 3,
           }}>
           <Title style={{marginLeft: 10}}>Najnovšie inzeráty</Title>
-          <NewAdsCarousel />
+          <NewAdsCarousel navigation={navigation} />
         </View>
       </View>
     </>

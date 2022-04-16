@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, ScrollView} from 'react-native';
 import {
   Card,
   IconButton,
@@ -12,7 +12,7 @@ const AdCard = ({navigation, ad}) => {
     <Card
       mode="elevated"
       elevation={5}
-      onPress={() => console.log('card')}
+      onLongPress={() => navigation.navigate('Ad', {ad: ad})}
       style={{flex: 1}}>
       {false && (
         <Card.Cover
@@ -24,11 +24,13 @@ const AdCard = ({navigation, ad}) => {
       <Card.Content
         style={{
           flex: 1,
-          justifyContent: 'space-between',
           flexDirection: 'column',
         }}>
-        <Title>{ad.name}</Title>
-
+        <View style={{flex: 4, marginTop: '5%'}}>
+          <ScrollView>
+            <Text>{ad.name}</Text>
+          </ScrollView>
+        </View>
         <View
           style={{
             flex: 1,
