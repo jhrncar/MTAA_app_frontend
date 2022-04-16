@@ -8,6 +8,7 @@ import {
   Title,
 } from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import * as Animatable from 'react-native-animatable';
 import styled from 'styled-components';
 import {BottomNavigation, Text, useTheme, Switch} from 'react-native-paper';
 import {View, ScrollView, StyleSheet} from 'react-native';
@@ -25,17 +26,43 @@ const Register = ({navigation}) => {
   const {register} = React.useContext(AuthContext);
   
   
+  
   const [email, setEmail] = useState(null);
+  const [valid_email, setValid_Email] = useState(true);
   const [firstname, setFirstName] = useState(null);
   const [lastname, setLastName] = useState(null);
   const [name, setName] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirmpassword, setConfirmPassword] = useState(null);
+  const [equal_pass, setEqual_Pass] = useState(true);
   const [street, setStreet] = useState(null);
   const [zipcode, setZipcode] = useState(null);
   const [city, setCity] = useState(null);
-  const [district, setDistrict] = useState(null)
-  const [phone, setPhone] = useState(null)
+  const [district, setDistrict] = useState(null);
+  const [phone, setPhone] = useState(null);
+
+  function validateEmail (email) {
+    const regexp =  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    return regexp.test(email);
+  };
+
+  const CheckEmail = (val) => {
+
+    var isvalid = validateEmail(val)
+    
+    if(isvalid !== true)
+      setValid_Email(false)
+      if(isvalid === true)
+      setValid_Email(true)
+  };
+
+  const CheckPasswords = (pass,conf) => {
+
+    if(pass === conf)
+      setEqual_Pass(true)
+    if(pass !== conf)
+      setEqual_Pass(false)
+  };
     
   return (
     <ScrollView
@@ -79,20 +106,29 @@ const Register = ({navigation}) => {
             onChangeText={(val) => setName(val)}
             value={name}
           />
+
           <InputStyled
             label={'E-mail'}
             mode="outlined"
             outlineColor={colors.tertiary}
             keyboardType="email-address"
             onChangeText={(val) => setEmail(val)}
+            onEndEditing={(e) => CheckEmail(e.nativeEvent.text)}
             value={email}
           />
+          {valid_email ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>Nesprávny formát emailu (správny formát: example@example.sk)</Text>
+            </Animatable.View>
+          }
+
           <InputStyled
             secureTextEntry={true}
             label={'Heslo'}
             mode="outlined"
             outlineColor={colors.tertiary}
             onChangeText={(val) => setPassword(val)}
+            onEndEditing={(e) => CheckPasswords(e.nativeEvent.text, confirmpassword)}
             value={password}
           />
           <InputStyled
@@ -101,10 +137,16 @@ const Register = ({navigation}) => {
             mode="outlined"
             outlineColor={colors.tertiary}
             onChangeText={(val) => setConfirmPassword(val)}
+            onEndEditing={(e) => CheckPasswords(e.nativeEvent.text, password)}
             value={confirmpassword}
           />
 
-          <Text>{name} {email} {password} {confirmpassword}</Text>
+          {equal_pass ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>Heslá nie sú rovnaké</Text>
+            </Animatable.View>
+          }
+          
         </View>
       )}
       {!isRequired && (
@@ -269,5 +311,8 @@ const styles = StyleSheet.create({
     borderColor: '#A9A9A9',
     borderWidth: 1,
     marginTop: 15,
+  },
+  errormsg: {
+    color: "red"
   }
 }) 
