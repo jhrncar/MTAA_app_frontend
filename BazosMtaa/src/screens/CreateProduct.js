@@ -1,4 +1,5 @@
 import React from 'react';
+import {useState} from 'react';
 import {
   Button,
   Headline,
@@ -10,8 +11,10 @@ import {
 } from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styled from 'styled-components';
+import * as Animatable from 'react-native-animatable';
 import {BottomNavigation, Text, useTheme, Appbar} from 'react-native-paper';
-import {View, ScrollView, Image} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
+import {View, ScrollView, Image, StyleSheet} from 'react-native';
 import {Link, useNavigation} from '@react-navigation/native';
 import ImagePicker, {
   launchCamera,
@@ -19,6 +22,20 @@ import ImagePicker, {
 } from 'react-native-image-picker';
 
 const CreateProduct = ({navigation}) => {
+  const [name, setName] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [city, setCity] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [street, setStreet] = useState(null);
+  const [zip_code, setZip_code] = useState(null);
+  const [district, setDistrict] = useState(null);
+  const [category, setCategory] = useState(null);
+  
+  const [enable_button_price, setEnable_Button_Price] = useState(true);
+  const [enable_button_zip, setEnable_Button_Zip] = useState(true);
+
+
+
   const {colors} = useTheme();
   const [pickerResponse, setPickerResponse] = React.useState(null);
   const useImageCallback = React.useCallback(response => {
@@ -48,12 +65,14 @@ const CreateProduct = ({navigation}) => {
     formData.append(
       'json',
       JSON.stringify({
-        name: 'new',
-        price: 69,
-        district: 'Senec',
-        description: 'test',
-        city: 'nitra',
-        category: 'Autá',
+        name: name,
+        price: price,
+        district: district,
+        description: description,
+        city: city,
+        category: category,
+        street: street,
+        zip_code: zip_code,
       }),
     );
     if (pickerResponse?.assets[0]) {
@@ -64,7 +83,7 @@ const CreateProduct = ({navigation}) => {
       });
     }
 
-    fetch('http://192.168.1.12:8000/create_new_ad/', {
+    fetch('http://192.168.100.14:8000/create_new_ad/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -73,7 +92,6 @@ const CreateProduct = ({navigation}) => {
       body: formData,
     })
       .then(value => {
-        alert('Ide');
         console.log(value);
       })
       .catch(error => {
@@ -81,6 +99,55 @@ const CreateProduct = ({navigation}) => {
         console.log(error);
       });
   };
+   
+  const [categories, setCategories] = useState([]);
+  const [data, setData] = React.useState([]);
+  React.useEffect(() => {
+    fetch('http://192.168.100.14:8000/get_districts/')
+      .then(res => res.json())
+      .then(res => setData(res))
+      .catch(err => console.log(err));
+  }, []);
+
+  React.useEffect(() => {
+    fetch('http://192.168.100.14:8000/get_categories/')
+      .then(res => res.json())
+      .then(res => setCategories(res))
+      .catch(err => console.log(err));
+  }, []);
+
+  function validate_numbers_only (par) {
+    const regexp = /^\d+$/;
+    return regexp.test(par);
+  }
+
+  const CheckPrice = val => {
+    var isvalid = validate_numbers_only(val);
+    var value = val;
+
+    if(isvalid !== true || value < 0){
+      setEnable_Button_Price(false);
+    }
+    
+    if(isvalid === true && value >= 0){
+      setEnable_Button_Price(true);
+    }
+  };
+
+  const CheckZip = val => {
+    var isvalid = validate_numbers_only(val);
+    var value = val;
+
+    if(isvalid !== true || value.length !== 5){
+      setEnable_Button_Zip(false);
+    }
+    
+    if(isvalid === true && value.length === 5){
+      setEnable_Button_Zip(true);
+    }
+  };
+
+
 
   return (
     <>
@@ -124,54 +191,101 @@ const CreateProduct = ({navigation}) => {
             label={'Názov inzerátu'}
             mode="outlined"
             outlineColor={colors.tertiary}
+            onChangeText={val => setName(val)}
+            value={name}
           />
+          {name ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>Nazov inzerátu je povinný</Text>
+            </Animatable.View>
+          }
           <InputStyled
             multiline
             label={'Popis'}
             mode="outlined"
             outlineColor={colors.tertiary}
+            onChangeText={val => setDescription(val)}
+            value={description}
           />
+          {description ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>Popis inzerátu je povinný</Text>
+            </Animatable.View>
+          }
           <InputStyled
             label={'Cena'}
             mode="outlined"
             outlineColor={colors.tertiary}
             keyboardType="numeric"
+            onChangeText={val => setPrice(val)}
+            onEndEditing={e => CheckPrice(e.nativeEvent.text)}
+            value={price}
           />
-          <InputStyled
-            label={'Kategória'} // dat na vyber kategorie
-            mode="outlined"
-            outlineColor={colors.tertiary}
-          />
+          {price ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>Cena je povinná</Text>
+            </Animatable.View>
+          }
+          {enable_button_price ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>Cena musí byť nezáporné celé číslo</Text>
+            </Animatable.View>
+          }
+          <View style={styles.pickerview}>
+            <Picker
+              dropdownIconColor="black"
+              style={styles.picker}
+              selectedValue={category}
+              onValueChange={(itemValue2, itemIndex2) => setCategory(itemValue2)}>
+              {categories.map(item2 => (
+                <Picker.Item label={item2.name} value={item2.name} key={item2.id} />
+              ))}
+            </Picker>
+          </View>
           <InputStyled
             label={'Ulica a číslo domu'}
             mode="outlined"
             outlineColor={colors.tertiary}
           />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
+          <View>
             <InputStyled
-              style={{width: '45%'}}
               label={'PSČ'}
               mode="outlined"
               outlineColor={colors.tertiary}
               keyboardType="numeric"
+              onEndEditing={e => CheckZip(e.nativeEvent.text)}
             />
-            <InputStyled
-              style={{width: '45%'}} // dat na vyber okresy
-              label={'Okres'}
-              mode="outlined"
-              outlineColor={colors.tertiary}
-            />
+            {enable_button_zip ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>PSČ musí byť vo formáte 90000</Text>
+            </Animatable.View>
+            }
+            <View style={styles.pickerview}>
+            <Picker
+              dropdownIconColor="black"
+              style={styles.picker}
+              selectedValue={district}
+              onValueChange={(itemValue, itemIndex) => setDistrict(itemValue)}>
+              {data.map(item => (
+                <Picker.Item label={item.name} value={item.name} key={item.id} />
+              ))}
+            </Picker>
+          </View>
           </View>
           <InputStyled
             label={'Mesto'}
             mode="outlined"
             outlineColor={colors.tertiary}
+            onChangeText={val => setCity(val)}
+            value={city}
           />
+          {city ? null :
+            <Animatable.View animation="fadeInLeft" duration ={500} >
+            <Text style={styles.errormsg}>Mesto je povinný údaj</Text>
+            </Animatable.View>
+          }
           <Button
+            disabled={!(name && description && enable_button_zip && price && enable_button_price && city && enable_button_zip)}
             style={{marginVertical: '10%'}}
             mode="contained"
             onPress={handleCreate}>
@@ -195,3 +309,19 @@ const LinkStyled = styled(Link)`
   text-decoration-style: solid;
   text-decoration-color: #000;
 `;
+
+const styles = StyleSheet.create({
+  picker: {
+    color: '#000',
+    width: 300,
+    height: 50,
+  },
+  pickerview: {
+    borderColor: '#A9A9A9',
+    borderWidth: 1,
+    marginTop: 15,
+  },
+  errormsg: {
+    color: 'red',
+  },
+});

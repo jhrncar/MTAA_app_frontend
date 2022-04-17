@@ -22,7 +22,7 @@ export const AuthProvider = ({children}) => {
     district,
   ) => {
     setIsLoading(true);
-    fetch('http://192.168.1.12:8000/register/', {
+    fetch('http://192.168.100.14:8000/register/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -61,15 +61,15 @@ export const AuthProvider = ({children}) => {
 
   const login = (username, password) => {
     setIsLoading(true);
-    fetch('http://192.168.1.12:8000/login/', {
+    fetch('http://192.168.100.14:8000/login/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user_name: 'filter_test', //tu bude premenna username
-        password: 'test123', //tu bude premenna password
+        user_name: username, //tu bude premenna username
+        password: password, //tu bude premenna password
       }),
     })
       .then(value => {
@@ -93,7 +93,7 @@ export const AuthProvider = ({children}) => {
   const logout = () => {
     setIsLoading(true);
 
-    fetch('http://192.168.1.12:8000/logout/', {
+    fetch('http://192.168.100.14:8000/logout/', {
       method: 'POST',
     })
       .then(value => {
@@ -116,7 +116,7 @@ export const AuthProvider = ({children}) => {
     try {
       setSplashLoading(true);
       let userInfo = await EncryptedStorage.getItem('loggedIn');
-      //userInfo = JSON.parse(userInfo).loggedIn;
+      userInfo = JSON.parse(userInfo).loggedIn;
 
       if (userInfo) {
         console.log(userInfo);

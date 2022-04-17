@@ -11,7 +11,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import * as Animatable from 'react-native-animatable';
 import styled from 'styled-components';
 import {BottomNavigation, Text, useTheme, Switch} from 'react-native-paper';
-import {View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, ScrollView, StyleSheet} from 'react-native';
 import {Link, useNavigation} from '@react-navigation/native';
 import {Picker} from '@react-native-picker/picker';
 import useWindowDimensions from 'react-native/Libraries/Utilities/useWindowDimensions';
@@ -346,7 +346,7 @@ const Register = ({navigation}) => {
               selectedValue={district}
               onValueChange={(itemValue, itemIndex) => setDistrict(itemValue)}>
               {data.map(item => (
-                <Picker.Item label={item.name} value={item.id} key={item.id} />
+                <Picker.Item label={item.name} value={item.name} key={item.id} />
               ))}
             </Picker>
           </View>

@@ -42,7 +42,9 @@ const Login = ({navigation}) => {
       />
       <ItemsStyled>
         <LinkStyled to="/Register">Chceš sa registrovať? Klikni sem</LinkStyled>
-        <Button mode="contained" onPress={login(name,password)}>
+        <Button
+        disabled={!(name && password)}
+        mode="contained" onPress={() => login(name,password)}>
           Prihlásiť sa
         </Button>
         <LinkStyled to="/NotLoggedApp/Domov">
