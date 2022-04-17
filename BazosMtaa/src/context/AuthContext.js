@@ -22,7 +22,7 @@ export const AuthProvider = ({children}) => {
     district,
   ) => {
     setIsLoading(true);
-    fetch('http://192.168.100.14:8000/register/', {
+    fetch('http://192.168.1.12:8000/register/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -50,6 +50,12 @@ export const AuthProvider = ({children}) => {
             loggedIn: true,
           }),
         );
+        EncryptedStorage.setItem(
+          'username',
+          JSON.stringify({
+            username: name,
+          }),
+        );
         setIsLoading(false);
       })
       .catch(error => {
@@ -61,7 +67,7 @@ export const AuthProvider = ({children}) => {
 
   const login = (username, password) => {
     setIsLoading(true);
-    fetch('http://192.168.100.14:8000/login/', {
+    fetch('http://192.168.1.12:8000/login/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -81,6 +87,12 @@ export const AuthProvider = ({children}) => {
             loggedIn: true,
           }),
         );
+        EncryptedStorage.setItem(
+          'username',
+          JSON.stringify({
+            username: username,
+          }),
+        );
         setIsLoading(false);
       })
       .catch(error => {
@@ -93,7 +105,7 @@ export const AuthProvider = ({children}) => {
   const logout = () => {
     setIsLoading(true);
 
-    fetch('http://192.168.100.14:8000/logout/', {
+    fetch('http://192.168.1.12:8000/logout/', {
       method: 'POST',
     })
       .then(value => {
@@ -103,6 +115,12 @@ export const AuthProvider = ({children}) => {
           'loggedIn',
           JSON.stringify({
             loggedIn: false,
+          }),
+        );
+        EncryptedStorage.setItem(
+          'username',
+          JSON.stringify({
+            username: null,
           }),
         );
         setIsLoading(false);
@@ -115,9 +133,9 @@ export const AuthProvider = ({children}) => {
   const isLoggedIn = async () => {
     try {
       setSplashLoading(true);
+
       let userInfo = await EncryptedStorage.getItem('loggedIn');
       userInfo = JSON.parse(userInfo).loggedIn;
-
       if (userInfo) {
         console.log(userInfo);
         setLogged(userInfo);

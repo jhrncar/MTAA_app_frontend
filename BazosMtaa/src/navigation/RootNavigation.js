@@ -18,6 +18,7 @@ import AdCard from '../components/AdCard';
 import AdScreen from '../screens/AdScreen';
 import UpdateProfile from '../screens/UpdateProfile';
 import UserProfile from '../screens/UserProfile';
+import UpdateAd from '../screens/UpdateAd';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -59,6 +60,11 @@ const MainNavigation = () => {
               name="UpdateProfile"
               component={UpdateProfile}
               options={{headerShown: true}}
+            />
+            <Stack.Screen
+              name="UpdateAd"
+              component={UpdateAd}
+              options={{headerShown: false}}
             />
           </Stack.Group>
         )}

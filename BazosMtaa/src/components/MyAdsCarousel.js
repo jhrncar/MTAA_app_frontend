@@ -70,7 +70,7 @@ const MyAdsCarousel = ({navigation}) => {
             margin: 15,
             alignSelf: 'center',
           }}>
-          <AdCard navigation={navigation} ad={item} owner={true} />
+          <AdCard navigation={navigation} ad={item} />
         </View>
       ))}
 

@@ -24,14 +24,33 @@ import {
   Button,
   useTheme,
   IconButton,
+  FAB,
+  Portal,
 } from 'react-native-paper';
 import AdCard from '../components/AdCard';
 import CategoryCard from '../components/CategoryCard';
-
+import EncryptedStorage from 'react-native-encrypted-storage';
 import {Image} from 'react-native';
+import {AuthContext} from '../context/AuthContext';
 const AdScreen = ({route, navigation}) => {
   const ad = route.params.ad;
-  const owner = route.params.owner;
+  const [owner, setOwner] = React.useState();
+
+  React.useEffect(() => {
+    EncryptedStorage.getItem('username')
+      .then(res => {
+        setOwner(JSON.parse(res).username);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+  const {isLogged} = React.useContext(AuthContext);
+  const [state, setState] = React.useState({open: false});
+
+  const onStateChange = ({open}) => setState({open});
+
+  const {open} = state;
   return (
     <>
       <Appbar.Header>
@@ -79,15 +98,20 @@ const AdScreen = ({route, navigation}) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Title>{ad.district}</Title>
+              <Title>
+                {ad.district}, {ad.city}, {ad.zip_code}
+              </Title>
               <Ionicons name="md-location" size={24} color="black" />
             </View>
-            <IconButton
-              icon="star-outline"
-              color={'#FF8F00'}
-              size={24}
-              onPress={() => console.log('Pressed')}
-            />
+
+            {isLogged && owner != ad.owner && (
+              <IconButton
+                icon="star-outline"
+                color={'#FF8F00'}
+                size={24}
+                onPress={() => console.log('Pressed')}
+              />
+            )}
           </View>
           <Text style={{color: 'black'}}>{ad.description}</Text>
         </View>
@@ -99,7 +123,7 @@ const AdScreen = ({route, navigation}) => {
           alignSelf: 'center',
           marginBottom: '5%',
         }}>
-        {!owner && (
+        {isLogged && owner != ad.owner && (
           <>
             <Button
               style={{marginVertical: '3%'}}
@@ -114,6 +138,36 @@ const AdScreen = ({route, navigation}) => {
               Kontaktovať
             </Button>
           </>
+        )}
+        {isLogged && owner === ad.owner && route.name === 'Ad' && (
+          <Portal>
+            <FAB.Group
+              open={open}
+              icon={open ? 'check' : 'keyboard-settings'}
+              color={open ? 'green' : 'black'}
+              fabStyle={{backgroundColor: 'white'}}
+              actions={[
+                {
+                  icon: 'delete',
+                  label: 'Vymazať',
+                  onPress: () => console.log('Pressed star'),
+                  style: {backgroundColor: 'red'},
+                  labelTextColor: 'red',
+                },
+                {
+                  icon: 'pencil',
+                  label: 'Upraviť',
+                  onPress: () => navigation.navigate('UpdateAd', {ad: ad}),
+                },
+              ]}
+              onStateChange={onStateChange}
+              onPress={() => {
+                if (open) {
+                  // do something if the speed dial is open
+                }
+              }}
+            />
+          </Portal>
         )}
       </View>
     </>

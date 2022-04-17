@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Image, ScrollView} from 'react-native';
+import EncryptedStorage from 'react-native-encrypted-storage';
 import {
   Card,
   IconButton,
@@ -7,12 +8,25 @@ import {
   Title,
   TouchableRipple,
 } from 'react-native-paper';
-const AdCard = ({navigation, ad, owner}) => {
+import {AuthContext} from '../context/AuthContext';
+const AdCard = ({navigation, ad}) => {
+  const {isLogged} = React.useContext(AuthContext);
+  const [owner, setOwner] = React.useState();
+
+  React.useEffect(() => {
+    EncryptedStorage.getItem('username')
+      .then(res => {
+        setOwner(JSON.parse(res).username);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
   return (
     <Card
       mode="elevated"
       elevation={5}
-      onLongPress={() => navigation.navigate('Ad', {ad: ad, owner: owner})}
+      onLongPress={() => navigation.navigate('Ad', {ad: ad})}
       style={{flex: 1}}>
       <Card.Cover
         resizeMode="stretch"
@@ -37,12 +51,14 @@ const AdCard = ({navigation, ad, owner}) => {
             alignItems: 'center',
           }}>
           <Text>700 €</Text>
-          <IconButton
-            icon="star-outline"
-            color={'#FF8F00'}
-            size={16}
-            onPress={() => console.log('Pressed')}
-          />
+          {isLogged && owner != ad.owner && (
+            <IconButton
+              icon="star-outline"
+              color={'#FF8F00'}
+              size={16}
+              onPress={() => console.log('Pressed')}
+            />
+          )}
         </View>
       </Card.Content>
     </Card>
