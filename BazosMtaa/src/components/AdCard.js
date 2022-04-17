@@ -7,12 +7,12 @@ import {
   Title,
   TouchableRipple,
 } from 'react-native-paper';
-const AdCard = ({navigation, ad}) => {
+const AdCard = ({navigation, ad, owner}) => {
   return (
     <Card
       mode="elevated"
       elevation={5}
-      onLongPress={() => navigation.navigate('Ad', {ad: ad})}
+      onLongPress={() => navigation.navigate('Ad', {ad: ad, owner: owner})}
       style={{flex: 1}}>
       <Card.Cover
         resizeMode="stretch"

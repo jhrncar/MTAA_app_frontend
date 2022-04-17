@@ -31,6 +31,7 @@ import CategoryCard from '../components/CategoryCard';
 import {Image} from 'react-native';
 const AdScreen = ({route, navigation}) => {
   const ad = route.params.ad;
+  const owner = route.params.owner;
   return (
     <>
       <Appbar.Header>
@@ -98,12 +99,22 @@ const AdScreen = ({route, navigation}) => {
           alignSelf: 'center',
           marginBottom: '5%',
         }}>
-        <Button style={{marginVertical: '3%'}} mode="outlined" color="black">
-          Predajca: {ad.owner}
-        </Button>
-        <Button style={{marginVertical: '3%'}} mode="contained">
-          Kontaktovať
-        </Button>
+        {!owner && (
+          <>
+            <Button
+              style={{marginVertical: '3%'}}
+              mode="outlined"
+              color="black"
+              onPress={() =>
+                navigation.navigate('UserProfile', {owner: ad.owner})
+              }>
+              Predajca: {ad.owner}
+            </Button>
+            <Button style={{marginVertical: '3%'}} mode="contained">
+              Kontaktovať
+            </Button>
+          </>
+        )}
       </View>
     </>
   );

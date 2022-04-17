@@ -22,14 +22,15 @@ import NewAdsCarousel from '../components/NewAdsCarousel';
 import MyAdsCarousel from '../components/MyAdsCarousel';
 import {useFocusEffect} from '@react-navigation/native';
 
-const Profile = ({navigation}) => {
+const UserProfile = ({route, navigation}) => {
   const {colors} = useTheme();
   const {logout} = React.useContext(AuthContext);
   const [data, setData] = React.useState([]);
+  const owner = route.params.owner;
 
   useFocusEffect(
     React.useCallback(() => {
-      fetch('http://192.168.1.12:8000/my_profile/')
+      fetch('http://192.168.1.12:8000/user_profile/' + owner)
         .then(res => res.json())
         .then(res => setData(res.items))
         .catch(err => console.log(err));
@@ -37,9 +38,8 @@ const Profile = ({navigation}) => {
       return () => {
         setData([]);
       };
-    }, []),
+    }, [owner]),
   );
-  console.log(data.phone);
   return (
     <>
       <Appbar.Header>
@@ -110,35 +110,13 @@ const Profile = ({navigation}) => {
                 </ItemStyled>
               )}
             </View>
-            <ItemStyled>
-              <Button
-                mode="contained"
-                onPress={() =>
-                  navigation.navigate('UpdateProfile', {profile: data})
-                }>
-                Upraviť profil
-              </Button>
-              <Button mode="contained" onPress={logout}>
-                Odhlásiť sa
-              </Button>
-            </ItemStyled>
           </ScrollView>
-        </View>
-        <View
-          style={{
-            flex: 3,
-            borderStyle: 'solid',
-            borderColor: colors.tertiary,
-            borderTopWidth: 3,
-          }}>
-          <Title style={{marginLeft: 10}}>Moje inzeráty</Title>
-          <MyAdsCarousel navigation={navigation} />
         </View>
       </View>
     </>
   );
 };
-export default Profile;
+export default UserProfile;
 
 const InputStyled = styled(TextInput)`
   margin-vertical: 10px;
