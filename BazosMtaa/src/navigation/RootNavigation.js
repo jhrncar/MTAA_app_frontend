@@ -16,6 +16,8 @@ import {AuthContext} from '../context/AuthContext';
 import FavoritesScreen from '../screens/Favorites';
 import AdCard from '../components/AdCard';
 import AdScreen from '../screens/AdScreen';
+import UpdateProfile from '../screens/UpdateProfile';
+import UserProfile from '../screens/UserProfile';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -53,6 +55,11 @@ const MainNavigation = () => {
               component={LoggedAppNavigation}
               options={{headerShown: false}}
             />
+            <Stack.Screen
+              name="UpdateProfile"
+              component={UpdateProfile}
+              options={{headerShown: true}}
+            />
           </Stack.Group>
         )}
         <Stack.Screen
@@ -63,6 +70,11 @@ const MainNavigation = () => {
         <Stack.Screen
           name="Ad"
           component={AdScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="UserProfile"
+          component={UserProfile}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -24,7 +24,7 @@ import {
 import AdCard from './AdCard';
 import {useFocusEffect} from '@react-navigation/native';
 
-const NewAdsCarousel = ({navigation}) => {
+const MyAdsCarousel = ({navigation}) => {
   const [data, setData] = React.useState([]);
   const [index, setIndex] = React.useState(0);
 
@@ -37,7 +37,7 @@ const NewAdsCarousel = ({navigation}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      fetch('http://192.168.1.12:8000/latest_ads/')
+      fetch('http://192.168.1.12:8000/my_ads/')
         .then(res => res.json())
         .then(res => setData(res.items))
         .catch(err => console.log(err));
@@ -47,7 +47,6 @@ const NewAdsCarousel = ({navigation}) => {
       };
     }, []),
   );
-
   return (
     <View
       style={{
@@ -71,7 +70,7 @@ const NewAdsCarousel = ({navigation}) => {
             margin: 15,
             alignSelf: 'center',
           }}>
-          <AdCard navigation={navigation} ad={item} />
+          <AdCard navigation={navigation} ad={item} owner={true} />
         </View>
       ))}
 
@@ -84,4 +83,4 @@ const NewAdsCarousel = ({navigation}) => {
     </View>
   );
 };
-export default NewAdsCarousel;
+export default MyAdsCarousel;

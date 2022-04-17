@@ -61,7 +61,6 @@ const Search = ({route, navigation}) => {
   }, [query, page, category]);
 
   const handlePopulate = response => {
-    console.log(response.items);
     setResult(response.items);
     setPages(response.metadata.pages_total);
     setLoading(false);
