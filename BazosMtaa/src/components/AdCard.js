@@ -28,11 +28,13 @@ const AdCard = ({navigation, ad}) => {
       elevation={5}
       onLongPress={() => navigation.navigate('Ad', {ad: ad})}
       style={{flex: 1}}>
-      <Card.Cover
-        resizeMode="stretch"
-        source={{uri: 'http://192.168.1.12:8000/get_image/' + ad.picture}}
-        style={{flex: 1}}
-      />
+      {ad.picture !== null && (
+        <Card.Cover
+          resizeMode="stretch"
+          source={{uri: 'http://192.168.1.12:8000/get_image/' + ad.picture}}
+          style={{flex: 1}}
+        />
+      )}
       <Card.Content
         style={{
           flex: 1,
@@ -50,7 +52,7 @@ const AdCard = ({navigation, ad}) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <Text>700 €</Text>
+          <Text>{ad.prize} €</Text>
           {isLogged && owner != ad.owner && (
             <IconButton
               icon="star-outline"

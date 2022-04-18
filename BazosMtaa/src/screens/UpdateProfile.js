@@ -34,7 +34,6 @@ const UpdateProfile = ({navigation, route}) => {
   const [district, setDistrict] = useState(profile.district);
   const [phone, setPhone] = useState(profile.phone);
 
-
   const [enable_button_zip, setEnable_Button_Zip] = useState(true);
   const [enable_button_phone, setEnable_Button_Phone] = useState(true);
 
@@ -50,7 +49,7 @@ const UpdateProfile = ({navigation, route}) => {
       .catch(err => console.log(err));
   }, []);
 
-  function validate_numbers_only (par) {
+  function validate_numbers_only(par) {
     const regexp = /^\d+$/;
     return regexp.test(par);
   }
@@ -59,38 +58,37 @@ const UpdateProfile = ({navigation, route}) => {
     var isvalid = validate_numbers_only(val);
     var value = val;
 
-    if(value !== "" && (isvalid !== true || value.length !== 10)){
+    if (value !== '' && (isvalid !== true || value.length !== 10)) {
       setEnable_Button_Phone(false);
     }
-    
-    if(isvalid === true && value.length === 10){
+
+    if (isvalid === true && value.length === 10) {
       setEnable_Button_Phone(true);
     }
 
-    if(value === ""){
+    if (value === '') {
       setEnable_Button_Phone(true);
-      setPhone(null)
-    } 
+      setPhone(null);
+    }
   };
 
   const CheckZip = val => {
     var isvalid = validate_numbers_only(val);
     var value = val;
 
-    if(value !== "" && (isvalid !== true || value.length !== 5)){
+    if (value !== '' && (isvalid !== true || value.length !== 5)) {
       setEnable_Button_Zip(false);
     }
-    
-    if(isvalid === true && value.length === 5){
+
+    if (isvalid === true && value.length === 5) {
       setEnable_Button_Zip(true);
     }
 
-    if(value === ""){
+    if (value === '') {
       setEnable_Button_Zip(true);
-      setZipcode(null)
-    } 
+      setZipcode(null);
+    }
   };
-
 
   const CheckUsername = async name => {
     return fetch(
@@ -134,11 +132,11 @@ const UpdateProfile = ({navigation, route}) => {
     })
       .then(value => {
         EncryptedStorage.setItem(
-        'username',
-        JSON.stringify({
-          username: name,
-        }),
-      ); 
+          'username',
+          JSON.stringify({
+            username: name,
+          }),
+        );
         navigation.navigate('Domov');
       })
       .catch(error => {
@@ -174,11 +172,11 @@ const UpdateProfile = ({navigation, route}) => {
             onChangeText={val => setFirstName(val)}
             value={firstname}
           />
-          {firstname ? null :
-            <Animatable.View animation="fadeInLeft" duration ={500} >
-            <Text style={styles.errormsg}>Meno je povinné</Text>
+          {firstname ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errormsg}>Meno je povinné</Text>
             </Animatable.View>
-          }
+          )}
 
           <InputStyled
             label={'Priezvisko'}
@@ -187,11 +185,11 @@ const UpdateProfile = ({navigation, route}) => {
             onChangeText={val => setLastName(val)}
             value={lastname}
           />
-          {lastname ? null :
-            <Animatable.View animation="fadeInLeft" duration ={500} >
-            <Text style={styles.errormsg}>Priezvisko je povinné</Text>
+          {lastname ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errormsg}>Priezvisko je povinné</Text>
             </Animatable.View>
-          }
+          )}
 
           <InputStyled
             label={'Používateľské meno'}
@@ -201,11 +199,11 @@ const UpdateProfile = ({navigation, route}) => {
             onEndEditing={e => CheckUsername(e.nativeEvent.text)}
             value={name}
           />
-          {name ? null :
-            <Animatable.View animation="fadeInLeft" duration ={500} >
-            <Text style={styles.errormsg}>Používateľské meno je povinné</Text>
+          {name ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errormsg}>Používateľské meno je povinné</Text>
             </Animatable.View>
-          }
+          )}
           {unique_user ? null : (
             <Animatable.View animation="fadeInLeft" duration={500}>
               <Text style={styles.errormsg}>Toto meno sa už používa</Text>
@@ -231,12 +229,14 @@ const UpdateProfile = ({navigation, route}) => {
             value={zipcode}
             onChangeText={val => setZipcode(val)}
             onEndEditing={e => CheckZip(e.nativeEvent.text)}
-            />
-            {enable_button_zip ? true :
-              <Animatable.View animation="fadeInLeft" duration ={500} >
+          />
+          {enable_button_zip ? (
+            true
+          ) : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
               <Text style={styles.errormsg}>PSČ musí byť vo formáte 90000</Text>
-              </Animatable.View>
-            }
+            </Animatable.View>
+          )}
           <InputStyled
             label={'Mesto'}
             mode="outlined"
@@ -252,14 +252,16 @@ const UpdateProfile = ({navigation, route}) => {
             value={phone}
             onChangeText={val => setPhone(val)}
             onEndEditing={e => CheckPhone(e.nativeEvent.text)}
-            />
-            {enable_button_phone ? null :
-              <Animatable.View animation="fadeInLeft" duration ={500} >
-              <Text style={styles.errormsg}>Číslo musí byť vo formáte 0900000000</Text>
-              </Animatable.View>
-            }
-            
-            <View style={styles.pickerview}>
+          />
+          {enable_button_phone ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errormsg}>
+                Číslo musí byť vo formáte 0900000000
+              </Text>
+            </Animatable.View>
+          )}
+
+          <View style={styles.pickerview}>
             <Picker
               dropdownIconColor="black"
               style={styles.picker}
@@ -277,9 +279,19 @@ const UpdateProfile = ({navigation, route}) => {
         </View>
       )}
       <ItemsStyled>
-        <Button 
-          disabled={!(firstname && lastname && name && unique_user && enable_button_phone && enable_button_zip)}
-          mode="contained" onPress={handleUpdate}>
+        <Button
+          disabled={
+            !(
+              firstname &&
+              lastname &&
+              name &&
+              unique_user &&
+              enable_button_phone &&
+              enable_button_zip
+            )
+          }
+          mode="contained"
+          onPress={handleUpdate}>
           Upraviť profil
         </Button>
       </ItemsStyled>

@@ -67,13 +67,13 @@ const UpdateAd = ({route, navigation}) => {
       JSON.stringify({
         ad_id: ad.id,
         name: name,
-        price: price,
+        price: parseInt(price),
         district: district,
         description: description,
         city: city,
         category: category,
         street: street,
-        zip_code: zip_code,
+        zip_code: zip_code !== '' ? parseInt(zip_code) : null,
       }),
     );
     if (pickerResponse?.assets[0]) {
@@ -82,8 +82,8 @@ const UpdateAd = ({route, navigation}) => {
         type: pickerResponse?.assets[0].type,
         name: pickerResponse?.assets[0].fileName,
       });
+      console.log(formData);
     }
-
     fetch('http://192.168.1.12:8000/update_ad/', {
       method: 'POST',
       headers: {
@@ -93,7 +93,7 @@ const UpdateAd = ({route, navigation}) => {
       body: formData,
     })
       .then(value => {
-        console.log(value);
+        navigation.navigate('Domov');
       })
       .catch(error => {
         console.log('error');
@@ -136,15 +136,17 @@ const UpdateAd = ({route, navigation}) => {
   };
 
   const CheckZip = val => {
-    var isvalid = validate_numbers_only(val);
-    var value = val;
+    if (val !== '') {
+      var isvalid = validate_numbers_only(val);
+      var value = val;
 
-    if (isvalid !== true || value.length !== 5) {
-      setEnable_Button_Zip(false);
-    }
+      if (isvalid !== true || value.length !== 5) {
+        setEnable_Button_Zip(false);
+      }
 
-    if (isvalid === true && value.length === 5) {
-      setEnable_Button_Zip(true);
+      if (isvalid === true && value.length === 5) {
+        setEnable_Button_Zip(true);
+      }
     }
   };
 

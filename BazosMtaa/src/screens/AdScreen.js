@@ -26,6 +26,7 @@ import {
   IconButton,
   FAB,
   Portal,
+  Modal,
 } from 'react-native-paper';
 import AdCard from '../components/AdCard';
 import CategoryCard from '../components/CategoryCard';
@@ -35,7 +36,9 @@ import {AuthContext} from '../context/AuthContext';
 const AdScreen = ({route, navigation}) => {
   const ad = route.params.ad;
   const [owner, setOwner] = React.useState();
-
+  const [visible, setVisible] = React.useState(false);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
   React.useEffect(() => {
     EncryptedStorage.getItem('username')
       .then(res => {
@@ -46,11 +49,24 @@ const AdScreen = ({route, navigation}) => {
       });
   }, []);
   const {isLogged} = React.useContext(AuthContext);
-  const [state, setState] = React.useState({open: false});
 
-  const onStateChange = ({open}) => setState({open});
-
-  const {open} = state;
+  const handleDelete = () => {
+    fetch('http://192.168.1.12:8000/delete_ad/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ad_id: parseInt(ad.id),
+      }),
+    })
+      .then(res => {
+        navigation.navigate('Home');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <Appbar.Header>
@@ -98,9 +114,12 @@ const AdScreen = ({route, navigation}) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Title>
-                {ad.district}, {ad.city}, {ad.zip_code}
-              </Title>
+              <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                <Title>{ad.district}</Title>
+                <Title>{ad.city}</Title>
+                <Title>{ad.zip_code}</Title>
+                <Title>{ad.street}</Title>
+              </View>
               <Ionicons name="md-location" size={24} color="black" />
             </View>
 
@@ -139,35 +158,52 @@ const AdScreen = ({route, navigation}) => {
             </Button>
           </>
         )}
-        {isLogged && owner === ad.owner && route.name === 'Ad' && (
-          <Portal>
-            <FAB.Group
-              open={open}
-              icon={open ? 'check' : 'keyboard-settings'}
-              color={open ? 'green' : 'black'}
-              fabStyle={{backgroundColor: 'white'}}
-              actions={[
-                {
-                  icon: 'delete',
-                  label: 'Vymazať',
-                  onPress: () => console.log('Pressed star'),
-                  style: {backgroundColor: 'red'},
-                  labelTextColor: 'red',
-                },
-                {
-                  icon: 'pencil',
-                  label: 'Upraviť',
-                  onPress: () => navigation.navigate('UpdateAd', {ad: ad}),
-                },
-              ]}
-              onStateChange={onStateChange}
-              onPress={() => {
-                if (open) {
-                  // do something if the speed dial is open
-                }
-              }}
-            />
-          </Portal>
+        {isLogged && owner === ad.owner && (
+          <>
+            <Button
+              style={{marginVertical: '3%'}}
+              mode="contained"
+              onPress={() => navigation.navigate('UpdateAd', {ad: ad})}>
+              Upraviť
+            </Button>
+            <Button
+              style={{marginVertical: '3%', backgroundColor: 'red'}}
+              mode="contained"
+              onPress={showModal}>
+              Vymazať
+            </Button>
+            <Portal>
+              <Modal visible={visible} onDismiss={hideModal}>
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    width: '80%',
+                    alignSelf: 'center',
+                    padding: '5%',
+                  }}>
+                  <Headline>Naozaj si praješ vymazať inzerát?</Headline>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Button
+                      style={{marginVertical: '5%'}}
+                      mode="contained"
+                      onPress={hideModal}>
+                      Vrátiť sa
+                    </Button>
+                    <Button
+                      style={{marginVertical: '5%', backgroundColor: 'red'}}
+                      mode="contained"
+                      onPress={handleDelete}>
+                      Áno, vymazať
+                    </Button>
+                  </View>
+                </View>
+              </Modal>
+            </Portal>
+          </>
         )}
       </View>
     </>
