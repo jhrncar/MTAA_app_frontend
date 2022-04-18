@@ -42,7 +42,8 @@ const Register = ({navigation}) => {
   const [unique_email, setUnique_Email] = useState(true);
 
   const [enable_button_email, setEnable_Button_Email] = useState(false);
-  const [enable_button_unique_email, setEnable_Button_Unique_Email] = useState(false);
+  const [enable_button_unique_email, setEnable_Button_Unique_Email] =
+    useState(false);
   const [enable_button_pass, setEnable_Button_Pass] = useState(false);
   const [enable_button_user, setEnable_Button_User] = useState(false);
   const [enable_button_phone, setEnable_Button_Phone] = useState(true);
@@ -50,21 +51,21 @@ const Register = ({navigation}) => {
 
   const [passwordVisible, setPasswordVisible] = useState(true);
 
-  
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
-    fetch('http://192.168.100.14:8000/get_districts/')
+    fetch('http://192.168.1.12:8000/get_districts/')
       .then(res => res.json())
       .then(res => setData(res))
       .catch(err => console.log(err));
   }, []);
 
-  function validateEmail (email) {
-    const regexp =  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  function validateEmail(email) {
+    const regexp =
+      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     return regexp.test(email);
   }
 
-  function validate_numbers_only (par) {
+  function validate_numbers_only(par) {
     const regexp = /^\d+$/;
     return regexp.test(par);
   }
@@ -73,11 +74,11 @@ const Register = ({navigation}) => {
     var isvalid = validate_numbers_only(val);
     var value = val;
 
-    if(isvalid !== true || value.length !== 10){
+    if (isvalid !== true || value.length !== 10) {
       setEnable_Button_Phone(false);
     }
-    
-    if(isvalid === true && value.length === 10){
+
+    if (isvalid === true && value.length === 10) {
       setEnable_Button_Phone(true);
     }
   };
@@ -86,103 +87,92 @@ const Register = ({navigation}) => {
     var isvalid = validate_numbers_only(val);
     var value = val;
 
-    if(isvalid !== true || value.length !== 5){
+    if (isvalid !== true || value.length !== 5) {
       setEnable_Button_Zip(false);
     }
-    
-    if(isvalid === true && value.length === 5){
+
+    if (isvalid === true && value.length === 5) {
       setEnable_Button_Zip(true);
     }
   };
 
-
-
   const CheckEmail = val => {
     var isvalid = validateEmail(val);
-    
-    if(isvalid !== true){
+
+    if (isvalid !== true) {
       setValid_Email(false);
       setEnable_Button_Email(false);
     }
-    
-    if(isvalid === true){
+
+    if (isvalid === true) {
       setValid_Email(true);
       setEnable_Button_Email(true);
     }
   };
 
-  const CheckPasswords = (pass,conf) => {
-
-    if(pass == conf){
+  const CheckPasswords = (pass, conf) => {
+    if (pass == conf) {
       setEqual_Pass(true);
       setEnable_Button_Pass(true);
     }
-    
-    if(pass !== conf){
+
+    if (pass !== conf) {
       setEqual_Pass(false);
       setEnable_Button_Pass(false);
     }
-    
   };
 
-  const CheckUsername = (name) => {
-    
-    return fetch('http://192.168.100.14:8000/check_username/?username=' + name, {
-    })
-    .then(response => {
-      const statusCode = response.status;
-      return { statusCode,};
-    })
-    .then(res => {
-      if (res.statusCode === 200){
-        setUnique_User(true);
-        setEnable_Button_User(true);
-      }
-      else{
-        setUnique_User(false);
-        setEnable_Button_User(false);
-      }
-    
-    }).catch(error => {
-      console.error(error);
-      return { name: "network error", description: "" };
-    });
-
+  const CheckUsername = name => {
+    return fetch(
+      'http://192.168.1.12:8000/check_username/?username=' + name,
+      {},
+    )
+      .then(response => {
+        const statusCode = response.status;
+        return {statusCode};
+      })
+      .then(res => {
+        if (res.statusCode === 200) {
+          setUnique_User(true);
+          setEnable_Button_User(true);
+        } else {
+          setUnique_User(false);
+          setEnable_Button_User(false);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        return {name: 'network error', description: ''};
+      });
   };
 
-  const CheckUniqueEmail = (email) => {
-    
-    CheckEmail(email)
+  const CheckUniqueEmail = email => {
+    CheckEmail(email);
 
-    return fetch('http://192.168.100.14:8000/check_email/?email=' + email, {
-    })
-    .then(response => {
-      const statusCode = response.status;
-      return { statusCode,};
-    })
-    .then(res => {
-      if (res.statusCode === 200){
-        setUnique_Email(true);
-        setEnable_Button_Unique_Email(true);
-      }
-      else{
-        setUnique_Email(false)
-        setEnable_Button_Unique_Email(true);
-      }
-
-    }).catch(error => {
-      console.error(error);
-      return { name: "network error", description: "" };
-    });
-
+    return fetch('http://192.168.1.12:8000/check_email/?email=' + email, {})
+      .then(response => {
+        const statusCode = response.status;
+        return {statusCode};
+      })
+      .then(res => {
+        if (res.statusCode === 200) {
+          setUnique_Email(true);
+          setEnable_Button_Unique_Email(true);
+        } else {
+          setUnique_Email(false);
+          setEnable_Button_Unique_Email(true);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        return {name: 'network error', description: ''};
+      });
   };
 
-
-    
   return (
     <ScrollView
       contentContainerStyle={{
-        paddingTop: '20%',
+        marginTop: '5%',
         width: '80%',
         alignSelf: 'center',
         justifySelf: 'center',
@@ -207,12 +197,12 @@ const Register = ({navigation}) => {
             onChangeText={val => setFirstName(val)}
             value={firstname}
           />
-          {firstname ? null :
-            <Animatable.View animation="fadeInLeft" duration ={500} >
-            <Text style={styles.errormsg}>Meno je povinné</Text>
+          {firstname ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errormsg}>Meno je povinné</Text>
             </Animatable.View>
-          }
-          
+          )}
+
           <InputStyled
             label={'Priezvisko'}
             mode="outlined"
@@ -220,63 +210,75 @@ const Register = ({navigation}) => {
             onChangeText={val => setLastName(val)}
             value={lastname}
           />
-          {lastname ? null :
-            <Animatable.View animation="fadeInLeft" duration ={500} >
-            <Text style={styles.errormsg}>Priezvisko je povinné</Text>
+          {lastname ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errormsg}>Priezvisko je povinné</Text>
             </Animatable.View>
-          }
+          )}
 
           <InputStyled
             label={'Používateľské meno'}
             mode="outlined"
             outlineColor={colors.tertiary}
-            onChangeText={(val) => setName(val)}
-            onEndEditing={(e) => CheckUsername(e.nativeEvent.text)}
+            onChangeText={val => setName(val)}
+            onEndEditing={e => CheckUsername(e.nativeEvent.text)}
             value={name}
           />
-          {unique_user ? null :
-            <Animatable.View animation="fadeInLeft" duration ={500} >
-            <Text style={styles.errormsg}>Toto meno sa už používa</Text>
+          {unique_user ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errormsg}>Toto meno sa už používa</Text>
             </Animatable.View>
-          }
+          )}
 
           <InputStyled
             label={'E-mail'}
             mode="outlined"
             outlineColor={colors.tertiary}
             keyboardType="email-address"
-            onChangeText={(val) => setEmail(val)}
-            onEndEditing={(e) => CheckUniqueEmail(e.nativeEvent.text)}
+            onChangeText={val => setEmail(val)}
+            onEndEditing={e => CheckUniqueEmail(e.nativeEvent.text)}
             value={email}
           />
-          {valid_email ? null : 
+          {valid_email ? null : (
             <Animatable.View animation="fadeInLeft" duration={500}>
               <Text style={styles.errormsg}>
                 Nesprávny formát emailu (správny formát: example@example.sk)
               </Text>
             </Animatable.View>
-          }
+          )}
 
-          {unique_email ? null :
-            <Animatable.View animation="fadeInLeft" duration ={500} >
-            <Text style={styles.errormsg}>Tento email sa už používa</Text>
+          {unique_email ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errormsg}>Tento email sa už používa</Text>
             </Animatable.View>
-          }
+          )}
 
           <InputStyled
             secureTextEntry={passwordVisible}
             label={'Heslo'}
-            right={<TextInput.Icon name={passwordVisible ? "eye" : "eye-off"}onPress={() => setPasswordVisible(!passwordVisible)} />}
+            right={
+              <TextInput.Icon
+                name={passwordVisible ? 'eye' : 'eye-off'}
+                onPress={() => setPasswordVisible(!passwordVisible)}
+              />
+            }
             mode="outlined"
             outlineColor={colors.tertiary}
-            onChangeText={(val) => setPassword(val)}
-            onEndEditing={e => CheckPasswords(e.nativeEvent.text, confirmpassword)}
+            onChangeText={val => setPassword(val)}
+            onEndEditing={e =>
+              CheckPasswords(e.nativeEvent.text, confirmpassword)
+            }
             value={password}
           />
           <InputStyled
             secureTextEntry={passwordVisible}
             label={'Zopakuj heslo'}
-            right={<TextInput.Icon name={passwordVisible ? "eye" : "eye-off"}onPress={() => setPasswordVisible(!passwordVisible)} />}
+            right={
+              <TextInput.Icon
+                name={passwordVisible ? 'eye' : 'eye-off'}
+                onPress={() => setPasswordVisible(!passwordVisible)}
+              />
+            }
             mode="outlined"
             outlineColor={colors.tertiary}
             onChangeText={val => setConfirmPassword(val)}
@@ -310,11 +312,11 @@ const Register = ({navigation}) => {
             onChangeText={val => setZipcode(val)}
             onEndEditing={e => CheckZip(e.nativeEvent.text)}
           />
-          {enable_button_zip ? null :
-            <Animatable.View animation="fadeInLeft" duration ={500} >
-            <Text style={styles.errormsg}>PSČ musí byť vo formáte 90000</Text>
+          {enable_button_zip ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errormsg}>PSČ musí byť vo formáte 90000</Text>
             </Animatable.View>
-          }
+          )}
 
           <InputStyled
             label={'Mesto'}
@@ -333,11 +335,13 @@ const Register = ({navigation}) => {
             onEndEditing={e => CheckPhone(e.nativeEvent.text)}
           />
 
-          {enable_button_phone ? null :
-            <Animatable.View animation="fadeInLeft" duration ={500} >
-            <Text style={styles.errormsg}>Číslo musí byť vo formáte 0900000000</Text>
+          {enable_button_phone ? null : (
+            <Animatable.View animation="fadeInLeft" duration={500}>
+              <Text style={styles.errormsg}>
+                Číslo musí byť vo formáte 0900000000
+              </Text>
             </Animatable.View>
-          }
+          )}
 
           <View style={styles.pickerview}>
             <Picker
@@ -346,7 +350,11 @@ const Register = ({navigation}) => {
               selectedValue={district}
               onValueChange={(itemValue, itemIndex) => setDistrict(itemValue)}>
               {data.map(item => (
-                <Picker.Item label={item.name} value={item.name} key={item.id} />
+                <Picker.Item
+                  label={item.name}
+                  value={item.name}
+                  key={item.id}
+                />
               ))}
             </Picker>
           </View>
@@ -354,9 +362,34 @@ const Register = ({navigation}) => {
       )}
       <ItemsStyled>
         <LinkStyled to="/Login">Chceš sa prihlásiť? Klikni sem</LinkStyled>
-        <Button disabled={!(enable_button_email &&firstname && lastname && 
-        enable_button_pass && enable_button_unique_email && enable_button_user && enable_button_phone && enable_button_zip)}
-        mode="contained"  onPress={()=>register(firstname, lastname,name, email, password,city,street,zipcode,phone,district)}>
+        <Button
+          disabled={
+            !(
+              enable_button_email &&
+              firstname &&
+              lastname &&
+              enable_button_pass &&
+              enable_button_unique_email &&
+              enable_button_user &&
+              enable_button_phone &&
+              enable_button_zip
+            )
+          }
+          mode="contained"
+          onPress={() =>
+            register(
+              firstname,
+              lastname,
+              name,
+              email,
+              password,
+              city,
+              street,
+              zipcode,
+              phone,
+              district,
+            )
+          }>
           Registrovať sa
         </Button>
         <LinkStyled to="/NotLoggedApp/Domov">
@@ -383,7 +416,7 @@ const LinkStyled = styled(Link)`
 `;
 
 const styles = StyleSheet.create({
-  pass_hyde:{
+  pass_hyde: {
     color: 'black',
   },
   picker: {

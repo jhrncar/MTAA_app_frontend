@@ -37,7 +37,7 @@ const MyAdsCarousel = ({navigation}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      fetch('http://192.168.100.14:8000/my_ads/')
+      fetch('http://192.168.1.12:8000/my_ads/')
         .then(res => res.json())
         .then(res => setData(res.items))
         .catch(err => console.log(err));

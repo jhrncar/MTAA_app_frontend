@@ -51,7 +51,7 @@ const AdScreen = ({route, navigation}) => {
   const {isLogged} = React.useContext(AuthContext);
 
   const handleDelete = () => {
-    fetch('http://192.168.100.14:8000/delete_ad/', {
+    fetch('http://192.168.1.12:8000/delete_ad/', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const AdScreen = ({route, navigation}) => {
       }),
     })
       .then(res => {
-        navigation.navigate('Home');
+        navigation.navigate('Domov');
       })
       .catch(err => {
         console.log(err);
@@ -87,7 +87,7 @@ const AdScreen = ({route, navigation}) => {
           <Image
             source={{
               uri: ad.picture
-                ? 'http://192.168.100.14:8000/get_image/' + ad.picture
+                ? 'http://192.168.1.12:8000/get_image/' + ad.picture
                 : undefined,
             }}
             style={{

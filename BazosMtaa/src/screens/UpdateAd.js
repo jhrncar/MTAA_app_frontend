@@ -58,9 +58,11 @@ const UpdateAd = ({route, navigation}) => {
       useImageCallback,
     );
     console.log(pickerResponse?.assets[0]);
+    console.log('aaa');
   };
 
   const handleUpdate = () => {
+    console.log('aasdasdsad dsdf s');
     let formData = new FormData();
     formData.append(
       'json',
@@ -84,7 +86,8 @@ const UpdateAd = ({route, navigation}) => {
       });
       console.log(formData);
     }
-    fetch('http://192.168.100.14:8000/update_ad/', {
+    console.log('adsds');
+    fetch('http://192.168.1.12:8000/update_ad/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -93,6 +96,7 @@ const UpdateAd = ({route, navigation}) => {
       body: formData,
     })
       .then(value => {
+        console.log('vvvv');
         navigation.navigate('Domov');
       })
       .catch(error => {
@@ -104,14 +108,14 @@ const UpdateAd = ({route, navigation}) => {
   const [categories, setCategories] = useState([]);
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
-    fetch('http://192.168.100.14:8000/get_districts/')
+    fetch('http://192.168.1.12:8000/get_districts/')
       .then(res => res.json())
       .then(res => setData(res))
       .catch(err => console.log(err));
   }, []);
 
   React.useEffect(() => {
-    fetch('http://192.168.100.14:8000/get_categories/')
+    fetch('http://192.168.1.12:8000/get_categories/')
       .then(res => res.json())
       .then(res => setCategories(res))
       .catch(err => console.log(err));
@@ -151,7 +155,7 @@ const UpdateAd = ({route, navigation}) => {
 
     if (value === '') {
       setEnable_Button_Zip(true);
-      setZipcode(null);
+      setZip_code(null);
     }
   };
 
@@ -174,7 +178,7 @@ const UpdateAd = ({route, navigation}) => {
             <TouchableRipple onPress={handleImage}>
               <Image
                 source={{
-                  uri: 'http://192.168.100.14:8000/get_image/' + ad.picture,
+                  uri: 'http://192.168.1.12:8000/get_image/' + ad.picture,
                 }}
                 resizeMode="contain"
                 style={{
@@ -357,8 +361,6 @@ const LinkStyled = styled(Link)`
 const styles = StyleSheet.create({
   picker: {
     color: '#000',
-    width: 300,
-    height: 50,
   },
   pickerview: {
     borderColor: '#A9A9A9',

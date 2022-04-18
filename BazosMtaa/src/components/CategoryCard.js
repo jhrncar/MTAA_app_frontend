@@ -17,7 +17,7 @@ const CategoryCard = ({navigation, category}) => {
       style={{margin: 10, flex: 1}}>
       <Card.Cover
         resizeMode="stretch"
-        source={{uri: 'http://192.168.100.14:8000/get_image/' + category.picture}}
+        source={{uri: 'http://192.168.1.12:8000/get_image/' + category.picture}}
       />
       <Card.Content>
         <Title style={{alignSelf: 'center'}}>{category.name}</Title>

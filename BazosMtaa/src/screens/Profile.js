@@ -29,7 +29,7 @@ const Profile = ({navigation}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      fetch('http://192.168.100.14:8000/my_profile/')
+      fetch('http://192.168.1.12:8000/my_profile/')
         .then(res => res.json())
         .then(res => setData(res.items))
         .catch(err => console.log(err));
@@ -62,7 +62,7 @@ const Profile = ({navigation}) => {
             flexDirection: 'column',
           }}>
           <ScrollView>
-          <View style={{flex: 1, marginTop: '5%'}}>
+            <View style={{flex: 1, marginTop: '5%'}}>
               <ItemStyled>
                 <Title style={{color: 'black'}}>Používateľské meno:</Title>
                 <Title style={{color: 'black'}}>{data.user_name}</Title>

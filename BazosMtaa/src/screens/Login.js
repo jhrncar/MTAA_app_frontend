@@ -13,11 +13,10 @@ const Login = ({navigation}) => {
   const {colors} = useTheme();
   const {login} = React.useContext(AuthContext);
 
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState();
+  const [password, setPassword] = useState();
 
   const [passwordVisible, setPasswordVisible] = useState(true);
-
 
   return (
     <LoginScreenStyled>
@@ -28,7 +27,7 @@ const Login = ({navigation}) => {
         label={'Používateľské meno'}
         mode="outlined"
         outlineColor={colors.tertiary}
-        onChangeText={(val) => setName(val)}
+        onChangeText={val => setName(val)}
         value={name}
       />
       <InputStyled
@@ -36,15 +35,21 @@ const Login = ({navigation}) => {
         secureTextEntry={passwordVisible}
         mode="outlined"
         outlineColor={colors.tertiary}
-        right={<TextInput.Icon name={passwordVisible ? "eye" : "eye-off"}onPress={() => setPasswordVisible(!passwordVisible)} />}
-        onChangeText={(val) => setPassword(val)}
+        right={
+          <TextInput.Icon
+            name={passwordVisible ? 'eye' : 'eye-off'}
+            onPress={() => setPasswordVisible(!passwordVisible)}
+          />
+        }
+        onChangeText={val => setPassword(val)}
         value={password}
       />
       <ItemsStyled>
         <LinkStyled to="/Register">Chceš sa registrovať? Klikni sem</LinkStyled>
         <Button
-        disabled={!(name && password)}
-        mode="contained" onPress={() => login(name,password)}>
+          disabled={!(name && password)}
+          mode="contained"
+          onPress={() => login(name, password)}>
           Prihlásiť sa
         </Button>
         <LinkStyled to="/NotLoggedApp/Domov">
