@@ -81,7 +81,7 @@ const CreateProduct = ({navigation}) => {
       });
     }
 
-    fetch('http://192.168.1.12:8000/create_new_ad/', {
+    fetch('http://192.168.100.14:8000/create_new_ad/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -101,14 +101,14 @@ const CreateProduct = ({navigation}) => {
   const [categories, setCategories] = useState([]);
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
-    fetch('http://192.168.1.12:8000/get_districts/')
+    fetch('http://192.168.100.14:8000/get_districts/')
       .then(res => res.json())
       .then(res => setData(res))
       .catch(err => console.log(err));
   }, []);
 
   React.useEffect(() => {
-    fetch('http://192.168.1.12:8000/get_categories/')
+    fetch('http://192.168.100.14:8000/get_categories/')
       .then(res => res.json())
       .then(res => setCategories(res))
       .catch(err => console.log(err));
@@ -143,6 +143,11 @@ const CreateProduct = ({navigation}) => {
     if (isvalid === true && value.length === 5) {
       setEnable_Button_Zip(true);
     }
+
+    if(value === ""){
+      setEnable_Button_Zip(true);
+      setZip_code(null)
+    } 
   };
 
   return (
@@ -250,6 +255,8 @@ const CreateProduct = ({navigation}) => {
             label={'Ulica a číslo domu'}
             mode="outlined"
             outlineColor={colors.tertiary}
+            onChangeText={val => setStreet(val)}
+            value={street}
           />
           <View>
             <InputStyled
@@ -257,6 +264,8 @@ const CreateProduct = ({navigation}) => {
               mode="outlined"
               outlineColor={colors.tertiary}
               keyboardType="numeric"
+              onChangeText={val => setZip_code(val)}
+              value={zip_code}
               onEndEditing={e => CheckZip(e.nativeEvent.text)}
             />
             {enable_button_zip ? null : (

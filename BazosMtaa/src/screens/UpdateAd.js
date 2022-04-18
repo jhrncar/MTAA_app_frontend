@@ -27,8 +27,8 @@ const UpdateAd = ({route, navigation}) => {
   const [description, setDescription] = useState(ad.description);
   const [city, setCity] = useState(ad.city);
   const [price, setPrice] = useState(ad.prize.toString());
-  const [street, setStreet] = useState(ad.street?.toString());
-  const [zip_code, setZip_code] = useState(ad.zip_code?.toString());
+  const [street, setStreet] = useState(ad.street);
+  const [zip_code, setZip_code] = useState(ad.zip_code);
   const [district, setDistrict] = useState(ad.district);
   const [category, setCategory] = useState(ad.category);
   const [ogImage, setOgImage] = useState();
@@ -73,7 +73,7 @@ const UpdateAd = ({route, navigation}) => {
         city: city,
         category: category,
         street: street,
-        zip_code: zip_code !== '' ? parseInt(zip_code) : null,
+        zip_code: zip_code,
       }),
     );
     if (pickerResponse?.assets[0]) {
@@ -84,7 +84,7 @@ const UpdateAd = ({route, navigation}) => {
       });
       console.log(formData);
     }
-    fetch('http://192.168.1.12:8000/update_ad/', {
+    fetch('http://192.168.100.14:8000/update_ad/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -104,14 +104,14 @@ const UpdateAd = ({route, navigation}) => {
   const [categories, setCategories] = useState([]);
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
-    fetch('http://192.168.1.12:8000/get_districts/')
+    fetch('http://192.168.100.14:8000/get_districts/')
       .then(res => res.json())
       .then(res => setData(res))
       .catch(err => console.log(err));
   }, []);
 
   React.useEffect(() => {
-    fetch('http://192.168.1.12:8000/get_categories/')
+    fetch('http://192.168.100.14:8000/get_categories/')
       .then(res => res.json())
       .then(res => setCategories(res))
       .catch(err => console.log(err));
@@ -148,6 +148,11 @@ const UpdateAd = ({route, navigation}) => {
         setEnable_Button_Zip(true);
       }
     }
+
+    if (value === '') {
+      setEnable_Button_Zip(true);
+      setZipcode(null);
+    }
   };
 
   return (
@@ -169,7 +174,7 @@ const UpdateAd = ({route, navigation}) => {
             <TouchableRipple onPress={handleImage}>
               <Image
                 source={{
-                  uri: 'http://192.168.1.12:8000/get_image/' + ad.picture,
+                  uri: 'http://192.168.100.14:8000/get_image/' + ad.picture,
                 }}
                 resizeMode="contain"
                 style={{
@@ -263,7 +268,7 @@ const UpdateAd = ({route, navigation}) => {
             label={'Ulica a číslo domu'}
             mode="outlined"
             outlineColor={colors.tertiary}
-            onValueChange={val => setStreet(val)}
+            onChangeText={val => setStreet(val)}
             value={street}
           />
           <View>
@@ -273,7 +278,7 @@ const UpdateAd = ({route, navigation}) => {
               outlineColor={colors.tertiary}
               keyboardType="numeric"
               onEndEditing={e => CheckZip(e.nativeEvent.text)}
-              onValueChange={val => setZip_code(val)}
+              onChangeText={val => setZip_code(val)}
               value={zip_code}
             />
             {enable_button_zip ? null : (

@@ -22,7 +22,7 @@ export const AuthProvider = ({children}) => {
     district,
   ) => {
     setIsLoading(true);
-    fetch('http://192.168.1.12:8000/register/', {
+    fetch('http://192.168.100.14:8000/register/', {
       method: 'POST',
       headers: {
         Accept: '*/*',

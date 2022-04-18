@@ -30,7 +30,7 @@ const UserProfile = ({route, navigation}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      fetch('http://192.168.1.12:8000/user_profile/' + owner)
+      fetch('http://192.168.100.14:8000/user_profile/' + owner)
         .then(res => res.json())
         .then(res => setData(res.items))
         .catch(err => console.log(err));

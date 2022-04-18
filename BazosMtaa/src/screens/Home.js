@@ -18,7 +18,7 @@ const HomeScreen = ({navigation}) => {
   const {colors} = useTheme();
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
-    fetch('http://192.168.1.12:8000/get_categories/')
+    fetch('http://192.168.100.14:8000/get_categories/')
       .then(res => res.json())
       .then(res => setData(res))
       .catch(err => console.log(err));
