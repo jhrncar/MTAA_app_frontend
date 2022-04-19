@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -28,11 +28,22 @@ import {
   Portal,
   Modal,
 } from 'react-native-paper';
+import firestore from '@react-native-firebase/firestore';
+import {
+  MediaStream,
+  RTCPeerConnection,
+  RTCIceCandidate,
+  RTCSessionDescription,
+} from 'react-native-webrtc';
 import AdCard from '../components/AdCard';
 import CategoryCard from '../components/CategoryCard';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {Image} from 'react-native';
 import {AuthContext} from '../context/AuthContext';
+import Utils from '../../src_test/Utils';
+import GettingCall from '../../src_test/GettingCall';
+import Video from '../../src_test/Video';
+const configuration = {iceServers: [{url: 'stun:stun.l.google.com:19302'}]};
 const AdScreen = ({route, navigation}) => {
   const ad = route.params.ad;
   const [owner, setOwner] = React.useState();
@@ -67,6 +78,155 @@ const AdScreen = ({route, navigation}) => {
         console.log(err);
       });
   };
+
+  const [localStream, setLocalStream] = useState();
+  const [remoteStream, setRemoteStream] = useState();
+  const [gettingCall, setGettingCall] = useState(null);
+  const pc = useRef(null);
+  const connecting = useRef(false);
+
+  React.useEffect(() => {
+    const cRef = firestore().collection('meet').doc('chatId');
+    const subscribe = cRef.onSnapshot(snapshot => {
+      const data = snapshot.data();
+      if (pc.current && !pc.current.remoteDescription && data && data.answer) {
+        pc.current.setRemoteDescription(new RTCSessionDescription(data.answer));
+      }
+      if (data && data.offer && !connecting.current) {
+        setGettingCall(true);
+      }
+    });
+    const subscribeDelete = cRef.collection('callee').onSnapshot(snapshot => {
+      snapshot.docChanges().forEach(change => {
+        if (change.type === 'removed') {
+          hangup();
+        }
+      });
+    });
+    return () => {
+      subscribe();
+      subscribeDelete();
+    };
+  }, []);
+
+  const setupWebRTC = async () => {
+    pc.current = new RTCPeerConnection(configuration);
+
+    const stream = await Utils.getStream();
+
+    if (stream) {
+      setLocalStream(stream);
+      pc.current.addStream(stream);
+    }
+    pc.current.onaddstream = event => {
+      setRemoteStream(event.stream);
+    };
+  };
+  const create = async () => {
+    console.log('Calling...');
+    connecting.current = true;
+    await setupWebRTC().catch(e => console.log(e));
+    const cRef = firestore().collection('meet').doc('chatId');
+    collectIceCandidates(cRef, 'caller', 'callee');
+    if (pc.current) {
+      const offer = await pc.current.createOffer();
+      pc.current.setLocalDescription(offer);
+      const cWithOffer = {
+        offer: {
+          type: offer.type,
+          sdp: offer.sdp,
+        },
+      };
+      cRef.set(cWithOffer);
+    }
+  };
+  const join = async () => {
+    console.log('Joining...');
+    connecting.current = true;
+    setGettingCall(false);
+    const cRef = firestore().collection('meet').doc('chatId');
+    const offer = (await cRef.get()).data()?.offer;
+    if (offer) {
+      await setupWebRTC();
+      collectIceCandidates(cRef, 'callee', 'caller');
+      if (pc.current) {
+        pc.current.setRemoteDescription(new RTCSessionDescription(offer));
+        const answer = await pc.current.createAnswer();
+        pc.current.setLocalDescription(answer);
+        const cWithAnswer = {
+          answer: {
+            type: answer.type,
+            sdp: answer.sdp,
+          },
+        };
+        cRef.update(cWithAnswer);
+      }
+    }
+  };
+  const hangup = async () => {
+    setGettingCall(false);
+    console.log('Hanging up...');
+    connecting.current = false;
+    streamCleanUp();
+    firestoreCleanUp();
+    if (pc.current) {
+      pc.current.close();
+    }
+  };
+  const streamCleanUp = async () => {
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+      localStream.release();
+    }
+    setLocalStream(null);
+    setRemoteStream(null);
+  };
+  const firestoreCleanUp = async () => {
+    const cRef = firestore().collection('meet').doc('chatId');
+    if (cRef) {
+      const caleeCandidate = await cRef.collection('callee').get();
+      caleeCandidate.forEach(async candidate => await candidate.ref.delete());
+      const calerCandidate = await cRef.collection('caller').get();
+      calerCandidate.forEach(async candidate => await candidate.ref.delete());
+      cRef.delete();
+    }
+  };
+  const collectIceCandidates = async (cRef, localName, remoteName) => {
+    const candidateCollection = cRef.collection(localName);
+    if (pc.current) {
+      pc.current.onicecandidate = event => {
+        if (event.candidate) {
+          candidateCollection.add(event.candidate);
+        }
+      };
+    }
+    cRef.collection(remoteName).onSnapshot(querySnapshot => {
+      querySnapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+          const candidate = new RTCIceCandidate(change.doc.data());
+          if (pc.current) {
+            pc.current.addIceCandidate(new RTCIceCandidate(candidate));
+            pc.current?.addIceCandidate(candidate);
+          }
+        }
+      });
+    });
+  };
+
+  if (gettingCall) {
+    return <GettingCall hangup={hangup} join={join} />;
+  }
+
+  if (localStream) {
+    return (
+      <Video
+        hangup={hangup}
+        localStream={localStream}
+        remoteStream={remoteStream}
+      />
+    );
+  }
+
   return (
     <>
       <Appbar.Header>
@@ -153,7 +313,10 @@ const AdScreen = ({route, navigation}) => {
               }>
               Predajca: {ad.owner}
             </Button>
-            <Button style={{marginVertical: '3%'}} mode="contained">
+            <Button
+              style={{marginVertical: '3%'}}
+              mode="contained"
+              onPress={create}>
               Kontaktovať
             </Button>
           </>

@@ -12,6 +12,7 @@
   "dependencies": {
     "@freakycoder/react-native-helpers": "^1.0.2",
     "@react-native-firebase/app": "^14.7.0",
+    "@react-native-firebase/firestore": "^14.7.0",
     "@react-native-picker/picker": "^2.4.1",
     "@react-navigation/material-bottom-tabs": "^6.2.1",
     "@react-navigation/material-top-tabs": "^6.2.1",

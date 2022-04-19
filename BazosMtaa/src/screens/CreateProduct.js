@@ -52,6 +52,8 @@ const CreateProduct = ({navigation}) => {
         selectionLimit: 1,
         mediaType: 'photo',
         includeBase64: false,
+        maxHeight: 500,
+        maxWidth: 500,
       },
       useImageCallback,
     );
@@ -345,8 +347,6 @@ const LinkStyled = styled(Link)`
 const styles = StyleSheet.create({
   picker: {
     color: '#000',
-    width: 300,
-    height: 50,
   },
   pickerview: {
     borderColor: '#A9A9A9',

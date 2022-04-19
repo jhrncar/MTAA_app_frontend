@@ -39,7 +39,7 @@ const Profile = ({navigation}) => {
       };
     }, []),
   );
-
+  console.log(data);
   return (
     <>
       <Appbar.Header>

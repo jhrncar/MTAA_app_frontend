@@ -24,7 +24,6 @@ import {useFocusEffect} from '@react-navigation/native';
 
 const UserProfile = ({route, navigation}) => {
   const {colors} = useTheme();
-  const {logout} = React.useContext(AuthContext);
   const [data, setData] = React.useState([]);
   const owner = route.params.owner;
 
