@@ -32,7 +32,7 @@ const AdCard = ({navigation, ad}) => {
       {ad.picture !== null && (
         <Card.Cover
           resizeMode="stretch"
-          source={{uri: 'http://192.168.1.12:8000/get_image/' + ad.picture}}
+          source={{uri: 'http://147.175.160.9:8000/get_image/' + ad.picture}}
           style={{flex: 1}}
         />
       )}

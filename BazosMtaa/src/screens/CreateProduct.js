@@ -83,7 +83,7 @@ const CreateProduct = ({navigation}) => {
       });
     }
 
-    fetch('http://192.168.1.12:8000/create_new_ad/', {
+    fetch('http://147.175.160.9:8000/create_new_ad/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -104,14 +104,14 @@ const CreateProduct = ({navigation}) => {
   const [categories, setCategories] = useState([]);
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
-    fetch('http://192.168.1.12:8000/get_districts/')
+    fetch('http://147.175.160.9:8000/get_districts/')
       .then(res => res.json())
       .then(res => setData(res))
       .catch(err => console.log(err));
   }, []);
 
   React.useEffect(() => {
-    fetch('http://192.168.1.12:8000/get_categories/')
+    fetch('http://147.175.160.9:8000/get_categories/')
       .then(res => res.json())
       .then(res => setCategories(res))
       .catch(err => console.log(err));

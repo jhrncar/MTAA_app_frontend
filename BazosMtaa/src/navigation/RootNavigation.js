@@ -149,7 +149,6 @@ const LoggedAppNavigation = () => {
       })}>
       <Tab.Screen name="Domov" component={HomeScreen} />
       <Tab.Screen name="Pridať" component={CreateProduct} />
-      <Tab.Screen name="Obľúbené" component={FavoritesScreen} />
       <Tab.Screen name="Profil" component={Profile} />
     </Tab.Navigator>
   );

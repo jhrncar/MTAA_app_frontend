@@ -87,7 +87,7 @@ const UpdateAd = ({route, navigation}) => {
       console.log(formData);
     }
     console.log('adsds');
-    fetch('http://192.168.1.12:8000/update_ad/', {
+    fetch('http://147.175.160.9:8000/update_ad/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -108,14 +108,14 @@ const UpdateAd = ({route, navigation}) => {
   const [categories, setCategories] = useState([]);
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
-    fetch('http://192.168.1.12:8000/get_districts/')
+    fetch('http://147.175.160.9:8000/get_districts/')
       .then(res => res.json())
       .then(res => setData(res))
       .catch(err => console.log(err));
   }, []);
 
   React.useEffect(() => {
-    fetch('http://192.168.1.12:8000/get_categories/')
+    fetch('http://147.175.160.9:8000/get_categories/')
       .then(res => res.json())
       .then(res => setCategories(res))
       .catch(err => console.log(err));
@@ -178,7 +178,7 @@ const UpdateAd = ({route, navigation}) => {
             <TouchableRipple onPress={handleImage}>
               <Image
                 source={{
-                  uri: 'http://192.168.1.12:8000/get_image/' + ad.picture,
+                  uri: 'http://147.175.160.9:8000/get_image/' + ad.picture,
                 }}
                 resizeMode="contain"
                 style={{

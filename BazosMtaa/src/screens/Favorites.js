@@ -25,7 +25,7 @@ import CategoryCard from '../components/CategoryCard';
 
 import {Image} from 'react-native';
 
-export default ({navigation}) => {
+const FavoriteScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Appbar.Header>
@@ -47,7 +47,7 @@ export default ({navigation}) => {
                 <FlatList
                   horizontal
                   data={section.data}
-                  renderItem={({item}) => <AdCard ad={{name: 'test'}} />}
+                  renderItem={({item}) => <AdCard ad={item} />}
                   showsHorizontalScrollIndicator={false}
                   ItemSeparatorComponent={() => (
                     <Divider style={{width: 40, opacity: 0}} />
@@ -70,30 +70,55 @@ const SECTIONS = [
     title: 'Kategória: Auto',
     data: [
       {
-        key: '1',
-        text: 'Item text 1',
-        uri: 'https://picsum.photos/id/1/200',
+        id: '1',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
       {
-        key: '2',
-        text: 'Item text 2',
-        uri: 'https://picsum.photos/id/10/200',
+        id: '2',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
 
       {
-        key: '3',
-        text: 'Item text 3',
-        uri: 'https://picsum.photos/id/1002/200',
+        id: '3',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
       {
-        key: '4',
-        text: 'Item text 4',
-        uri: 'https://picsum.photos/id/1006/200',
+        id: '4',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
       {
-        key: '5',
-        text: 'Item text 5',
-        uri: 'https://picsum.photos/id/1008/200',
+        id: '5',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
     ],
   },
@@ -101,30 +126,55 @@ const SECTIONS = [
     title: 'Kategória: PC',
     data: [
       {
-        key: '1',
-        text: 'Item text 1',
-        uri: 'https://picsum.photos/id/1011/200',
+        id: '1',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
       {
-        key: '2',
-        text: 'Item text 2',
-        uri: 'https://picsum.photos/id/1012/200',
+        id: '2',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
 
       {
-        key: '3',
-        text: 'Item text 3',
-        uri: 'https://picsum.photos/id/1013/200',
+        id: '3',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
       {
-        key: '4',
-        text: 'Item text 4',
-        uri: 'https://picsum.photos/id/1015/200',
+        id: '4',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
       {
-        key: '5',
-        text: 'Item text 5',
-        uri: 'https://picsum.photos/id/1016/200',
+        id: '5',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
     ],
   },
@@ -132,34 +182,61 @@ const SECTIONS = [
     title: 'Kategória: Iné',
     data: [
       {
-        key: '1',
-        text: 'Item text 1',
-        uri: 'https://picsum.photos/id/1020/200',
+        id: '1',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
       {
-        key: '2',
-        text: 'Item text 2',
-        uri: 'https://picsum.photos/id/1024/200',
+        id: '2',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
 
       {
-        key: '3',
-        text: 'Item text 3',
-        uri: 'https://picsum.photos/id/1027/200',
+        id: '3',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
       {
-        key: '4',
-        text: 'Item text 4',
-        uri: 'https://picsum.photos/id/1035/200',
+        id: '4',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
       {
-        key: '5',
-        text: 'Item text 5',
-        uri: 'https://picsum.photos/id/1038/200',
+        id: '5',
+        prize: '100000',
+        name: 'Item text 1',
+        picture: 'fiit.png',
+        district: 'Nitra',
+        city: 'Nitra',
+        zip_code: '94501',
+        street: 'Krstná cesta',
       },
     ],
   },
 ];
+
+export default FavoriteScreen;
 
 const styles = StyleSheet.create({
   container: {

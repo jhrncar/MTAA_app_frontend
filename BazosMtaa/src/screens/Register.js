@@ -53,7 +53,7 @@ const Register = ({navigation}) => {
 
   const [data, setData] = React.useState([]);
   React.useEffect(() => {
-    fetch('http://192.168.1.12:8000/get_districts/')
+    fetch('http://147.175.160.9:8000/get_districts/')
       .then(res => res.json())
       .then(res => setData(res))
       .catch(err => console.log(err));
@@ -124,7 +124,7 @@ const Register = ({navigation}) => {
 
   const CheckUsername = name => {
     return fetch(
-      'http://192.168.1.12:8000/check_username/?username=' + name,
+      'http://147.175.160.9:8000/check_username/?username=' + name,
       {},
     )
       .then(response => {
@@ -149,7 +149,7 @@ const Register = ({navigation}) => {
   const CheckUniqueEmail = email => {
     CheckEmail(email);
 
-    return fetch('http://192.168.1.12:8000/check_email/?email=' + email, {})
+    return fetch('http://147.175.160.9:8000/check_email/?email=' + email, {})
       .then(response => {
         const statusCode = response.status;
         return {statusCode};

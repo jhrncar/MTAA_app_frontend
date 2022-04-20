@@ -1,6 +1,7 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 import React, {createContext, useEffect, useState} from 'react';
 import Register from '../screens/Register';
+import {Alert} from 'react-native';
 
 export const AuthContext = createContext();
 
@@ -8,6 +9,7 @@ export const AuthProvider = ({children}) => {
   const [isLogged, setLogged] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [splashLoading, setSplashLoading] = useState(false);
+  const [isError, setError] = useState(false);
 
   const register = (
     firstname,
@@ -22,7 +24,7 @@ export const AuthProvider = ({children}) => {
     district,
   ) => {
     setIsLoading(true);
-    fetch('http://192.168.1.12:8000/register/', {
+    fetch('http://147.175.160.9:8000/register/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -57,6 +59,9 @@ export const AuthProvider = ({children}) => {
             }),
           );
           setIsLoading(false);
+        } else {
+          setError(true);
+          setIsLoading(false);
         }
       })
       .catch(error => {
@@ -66,7 +71,7 @@ export const AuthProvider = ({children}) => {
 
   const login = (username, password) => {
     setIsLoading(true);
-    fetch('http://192.168.1.12:8000/login/', {
+    fetch('http://147.175.160.9:8000/login/', {
       method: 'POST',
       headers: {
         Accept: '*/*',
@@ -93,6 +98,9 @@ export const AuthProvider = ({children}) => {
             }),
           );
           setIsLoading(false);
+        } else {
+          setError(true);
+          setIsLoading(false);
         }
       })
       .catch(error => {
@@ -103,7 +111,7 @@ export const AuthProvider = ({children}) => {
   const logout = () => {
     setIsLoading(true);
 
-    fetch('http://192.168.1.12:8000/logout/', {
+    fetch('http://147.175.160.9:8000/logout/', {
       method: 'POST',
     })
       .then(value => {
@@ -128,6 +136,23 @@ export const AuthProvider = ({children}) => {
       });
   };
 
+  const errorAlert = () => {
+    console.log('error f');
+    Alert.alert(
+      'Chyba',
+      'Nesprávne prihlasovacie údaje',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            setError(false);
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
   const isLoggedIn = async () => {
     try {
       setSplashLoading(true);
@@ -149,6 +174,13 @@ export const AuthProvider = ({children}) => {
     isLoggedIn();
   }, []);
 
+  useEffect(() => {
+    console.log('error eff');
+    if (isError) {
+      errorAlert();
+    }
+  }, [isError]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -158,6 +190,7 @@ export const AuthProvider = ({children}) => {
         login,
         logout,
         splashLoading,
+        errorAlert,
       }}>
       {children}
     </AuthContext.Provider>
