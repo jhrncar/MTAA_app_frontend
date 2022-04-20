@@ -127,7 +127,9 @@ const AdScreen = ({route, navigation}) => {
     connecting.current = true;
     await setupWebRTC().catch(e => console.log(e));
     const cRef = firestore().collection('meet').doc('chatId');
-    collectIceCandidates(cRef, 'caller', 'callee');
+    await collectIceCandidates(cRef, 'caller', 'callee').catch(e =>
+      console.log(e),
+    );
     if (pc.current) {
       const offer = await pc.current.createOffer();
       pc.current.setLocalDescription(offer);
@@ -137,7 +139,7 @@ const AdScreen = ({route, navigation}) => {
           sdp: offer.sdp,
         },
       };
-      cRef.set(cWithOffer);
+      await cRef.set(cWithOffer).catch(e => console.log(e));
     }
   };
   const join = async () => {
@@ -145,10 +147,12 @@ const AdScreen = ({route, navigation}) => {
     connecting.current = true;
     setGettingCall(false);
     const cRef = firestore().collection('meet').doc('chatId');
-    const offer = (await cRef.get()).data()?.offer;
+    const offer = (await cRef.get().catch(e => console.log(e))).data()?.offer;
     if (offer) {
-      await setupWebRTC();
-      collectIceCandidates(cRef, 'callee', 'caller');
+      await setupWebRTC().catch(e => console.log(e));
+      await collectIceCandidates(cRef, 'callee', 'caller').catch(e =>
+        console.log(e),
+      );
       if (pc.current) {
         pc.current.setRemoteDescription(new RTCSessionDescription(offer));
         const answer = await pc.current.createAnswer();
@@ -167,8 +171,8 @@ const AdScreen = ({route, navigation}) => {
     setGettingCall(false);
     console.log('Hanging up...');
     connecting.current = false;
-    streamCleanUp();
-    firestoreCleanUp();
+    await streamCleanUp().catch(e => console.log(e));
+    await firestoreCleanUp().catch(e => console.log(e));
     if (pc.current) {
       pc.current.close();
     }
@@ -184,11 +188,17 @@ const AdScreen = ({route, navigation}) => {
   const firestoreCleanUp = async () => {
     const cRef = firestore().collection('meet').doc('chatId');
     if (cRef) {
-      const caleeCandidate = await cRef.collection('callee').get();
+      const caleeCandidate = await cRef
+        .collection('callee')
+        .get()
+        .catch(e => console.log(e));
       caleeCandidate.forEach(async candidate => await candidate.ref.delete());
-      const calerCandidate = await cRef.collection('caller').get();
+      const calerCandidate = await cRef
+        .collection('caller')
+        .get()
+        .catch(e => console.log(e));
       calerCandidate.forEach(async candidate => await candidate.ref.delete());
-      cRef.delete();
+      await cRef.delete().catch(e => console.log(e));
     }
   };
   const collectIceCandidates = async (cRef, localName, remoteName) => {
