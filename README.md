@@ -1,4 +1,7 @@
 # MTAA_app_frontend
+Semestrálne zadanie v 4.semestri na FIIT STU v predmete Mobilné technológie a aplikácie. Vypracovaný frontend pre aplikáciu na štýl Bazoš.
+Stack:
+
 https://reactnative.dev/
 https://reactjs.org/
 https://callstack.github.io/react-native-paper/index.html
